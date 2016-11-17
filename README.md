@@ -1,2 +1,2 @@
 # vsts-python-tasks
-VSTS tasks for Python
+Visual Studio Team Services tasks for Python
