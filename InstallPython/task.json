@@ -13,9 +13,9 @@
     "version": {
         "Major": 0,
         "Minor": 1,
-        "Patch": 13
+        "Patch": 21
     },
-    "minimumAgentVersion": "1.103.0",
+    "minimumAgentVersion": "2.0",
     "groups": [
         {
             "name": "versions",
@@ -115,7 +115,7 @@
         }
     ],
     "execution": {
-        "PowerShell": {
+        "PowerShell3": {
             "target": "InstallPython.ps1"
         }
     }

@@ -1,13 +1,7 @@
-param(
-    [string]$packages,
-    [string]$outputdir,
-    [string]$python,
-    [string]$dependencies
-)
-
-if (-not $outputdir) {
-    $outputdir = $env:BUILD_BINARIESDIRECTORY
-}
+$packages = Get-VstsInput -Name "packages" -Require
+$outputdir = Get-VstsInput -Name "outputdir" -Default $env:BUILD_BINARIESDIRECTORY
+$python = Get-VstsInput -Name "python" -Require
+$dependencies = Get-VstsInput -Name "dependencies"
 
 if (Test-Path $python) {
     $pythons = @($python)
@@ -17,7 +11,7 @@ if (Test-Path $python) {
 
 foreach($py in (gci $python -File -Recurse)) {
     if ($dependencies) {
-        Invoke-Tool -Path $py -Arguments "-m pip install $dependencies"
+        Invoke-VstsTool $py "-m pip install $dependencies"
     }
-    Invoke-Tool -Path $py -Arguments "-m pip wheel -w `"$outputdir`" $packages"
+    Invoke-VstsTool $py "-m pip wheel -w `"$outputdir`" $packages"
 }

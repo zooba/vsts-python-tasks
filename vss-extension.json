@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "python",
-    "version": "0.1.18",
+    "version": "0.1.33",
     "name": "Python build tools",
     "description": "Visual Studio Team Services extension for Python developers.",
     "publisher": "SteveDower",
@@ -25,6 +25,15 @@
             }
         },
         {
+            "id": "UploadPackage",
+            "description": "Uploads package directory to PyPI or another index.",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [ "ms.vss-distributed-task.tasks" ],
+            "properties": {
+                "name": "UploadPackage"
+            }
+        },
+        {
             "id": "PipWheel",
             "description": "Creates a wheel from a package on PyPI or a local directory.",
             "type": "ms.vss-distributed-task.task",
@@ -32,10 +41,31 @@
             "properties": {
                 "name": "PipWheel"
             }
+        },
+        {
+            "id": "BuildWheel",
+            "description": "Creates a wheel from a setup.py using bdist_wheel.",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [ "ms.vss-distributed-task.tasks" ],
+            "properties": {
+                "name": "BuildWheel"
+            }
+        },
+        {
+            "id": "SetVersion",
+            "description": "Updates the __version__ variable in a set of Python files",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [ "ms.vss-distributed-task.tasks" ],
+            "properties": {
+                "name": "SetVersion"
+            }
         }
     ],
     "files": [
         { "path": "InstallPython" },
-        { "path": "PipWheel" }
+        { "path": "PipWheel" },
+        { "path": "UploadPackage" },
+        { "path": "BuildWheel" },
+        { "path": "SetVersion" }
     ]
 }
