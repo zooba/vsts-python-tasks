@@ -1,3 +1,0 @@
-The Invoke-VstsTool command in this SDK has been modified to include a $DisplayArguments parameter.
-
-This parameter will be printed instead of the actual arguments.

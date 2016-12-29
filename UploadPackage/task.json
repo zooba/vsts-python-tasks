@@ -13,7 +13,7 @@
     "version": {
         "Major": 0,
         "Minor": 1,
-        "Patch": 8
+        "Patch": 14
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -38,11 +38,11 @@
         {
             "name": "distdir",
             "type": "filePath",
-            "label": "Packages path",
-            "defaultValue": "$(Build.BinariesDirectory)\\dist",
+            "label": "Packages",
+            "defaultValue": "$(Build.BinariesDirectory)\\dist\\*",
             "required": true,
             "groupName": "package",
-            "helpMarkDown": "Location of your distribution files."
+            "helpMarkDown": "Location of your distribution files. Should be a single file or wildcard."
         },
         {
             "name": "repository",
@@ -54,7 +54,7 @@
             "helpMarkDown": "The name or URL of the repository to upload to",
             "options": {
                 "pypi": "PyPI",
-                "testpypi": "Test PyPI"
+                "pypitest": "Test PyPI"
             },
             "properties": {
                 "EditableOptions": "True"
@@ -83,15 +83,15 @@
             "defaultValue": "$(Build.BinariesDirectory)\\python.exe",
             "required": true,
             "groupName": "advanced",
-            "helpMarkDown": "Search path for installed Python versions. This will be passed to Get-ChildItem and the first match will be used to upload."
+            "helpMarkDown": "Search path for installed Python versions. This will be passed to Get-ChildItem and the last match will be used to upload."
         },
         {
             "name": "dependencies",
             "type": "string",
             "label": "Dependencies",
-            "defaultValue": "--upgrade twine",
+            "defaultValue": "twine",
             "groupName": "advanced",
-            "helpMarkDown": "Packages to install prior to uploading packages."
+            "helpMarkDown": "Packages to install prior to uploading packages. Prefix with `--upgrade` to ensure you have the latest version."
         },
         {
             "name": "skipexisting",

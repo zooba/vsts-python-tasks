@@ -9,7 +9,7 @@ if (Test-Path $python) {
     $pythons = gci $python -File -Recurse
 }
 
-foreach($py in (gci $python -File -Recurse)) {
+foreach($py in $pythons) {
     if ($dependencies) {
         Invoke-VstsTool $py "-m pip install $dependencies"
     }

@@ -10,7 +10,7 @@ $otherargs = Get-VstsInput -Name "otherargs"
 if (Test-Path $python) {
     $py = $python
 } else {
-    $py = gci $python -File -Recurse | select -First 1
+    $py = gci $python -File -Recurse | select -Last 1
 }
 
 if ($dependencies) {
@@ -29,4 +29,11 @@ if ($otherargs) {
     $otherargs = ""
 }
 
-Invoke-VstsTool $py "-m twine upload `"$distdir`" -r $repository -u $username -p $password$skip$otherargs" -DisplayArguments "-m twine `"$distdir`" -r $repository -u ***** -p *****$skip$otherargs"
+try {
+    $env:TWINE_USERNAME = $username
+    $env:TWINE_PASSWORD = $password
+    Invoke-VstsTool $py "-m twine upload `"$distdir`" -r $repository $skip$otherargs" -RequireExitCodeZero
+} finally {
+    $env:TWINE_USERNAME = $null
+    $env:TWINE_PASSWORD = $null
+}

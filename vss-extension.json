@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "python",
-    "version": "0.1.35",
+    "version": "0.1.42",
     "name": "Python build tools",
     "description": "Visual Studio Team Services extension for Python developers.",
     "publisher": "SteveDower",
@@ -61,6 +61,15 @@
             }
         },
         {
+            "id": "PyTest",
+            "description": "Runs tests using PyTest.",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [ "ms.vss-distributed-task.tasks" ],
+            "properties": {
+                "name": "PyTest"
+            }
+        },
+        {
             "id": "SetVersion",
             "description": "Updates the __version__ variable in a set of Python files",
             "type": "ms.vss-distributed-task.task",
@@ -76,6 +85,7 @@
         { "path": "UploadPackage" },
         { "path": "BuildWheel" },
         { "path": "BuildSDist" },
+        { "path": "PyTest" },
         { "path": "SetVersion" }
     ]
 }

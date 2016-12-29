@@ -13,7 +13,7 @@
     "version": {
         "Major": 0,
         "Minor": 1,
-        "Patch": 9
+        "Patch": 12
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -75,9 +75,9 @@
             "name": "dependencies",
             "type": "string",
             "label": "Dependencies",
-            "defaultValue": "--upgrade pip setuptools wheel cython",
+            "defaultValue": "pip setuptools wheel cython",
             "groupName": "advanced",
-            "helpMarkDown": "Packages to install prior to building wheels."
+            "helpMarkDown": "Packages to install prior to building wheels. Prefix with `--upgrade` to ensure you have the latest version."
         },
         {
             "name": "workingdir",
