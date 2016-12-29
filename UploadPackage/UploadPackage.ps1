@@ -29,4 +29,4 @@ if ($otherargs) {
     $otherargs = ""
 }
 
-Invoke-VstsTool $py "-m twine `"$distdir`" -r $repository -u $username -p $password$skip$otherargs" -DisplayArguments "-m twine `"$distdir`" -r $repository -u *** -p ***$skip$otherargs"
+Invoke-VstsTool $py "-m twine upload `"$distdir`" -r $repository -u $username -p $password$skip$otherargs" -DisplayArguments "-m twine `"$distdir`" -r $repository -u ***** -p *****$skip$otherargs"

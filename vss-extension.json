@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "python",
-    "version": "0.1.33",
+    "version": "0.1.35",
     "name": "Python build tools",
     "description": "Visual Studio Team Services extension for Python developers.",
     "publisher": "SteveDower",
@@ -52,6 +52,15 @@
             }
         },
         {
+            "id": "BuildSDist",
+            "description": "Creates an sdist from a setup.py.",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [ "ms.vss-distributed-task.tasks" ],
+            "properties": {
+                "name": "BuildSDist"
+            }
+        },
+        {
             "id": "SetVersion",
             "description": "Updates the __version__ variable in a set of Python files",
             "type": "ms.vss-distributed-task.task",
@@ -66,6 +75,7 @@
         { "path": "PipWheel" },
         { "path": "UploadPackage" },
         { "path": "BuildWheel" },
+        { "path": "BuildSDist" },
         { "path": "SetVersion" }
     ]
 }
