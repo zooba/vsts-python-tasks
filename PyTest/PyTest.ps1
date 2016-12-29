@@ -1,18 +1,15 @@
 $testroot = Get-VstsInput -Name "testroot"
 $patterns = (Get-VstsInput -Name "patterns" -Default "").Split()
 $testfilter = Get-VstsInput -Name "testfilter" -Default ""
-$resultfile = Get-VstsInput -Name "resultfile" -Default "test-results.xml"
+$resultfile = Get-VstsInput -Name "resultfile" -Default "test-py%winver%.xml"
+$resultprefix = Get-VstsInput -Name "resultprefix" -Default "py%winver%"
 $doctests = Get-VstsInput -Name "doctests" -AsBool
 $python = Get-VstsInput -Name "python" -Require
 $dependencies = Get-VstsInput -Name "dependencies"
 $clearcache = Get-VstsInput -Name "clearcache" -AsBool
 $tempdir = Get-VstsInput -Name "tempdir"
 
-if (Test-Path $python) {
-    $pythons = @($python)
-} else {
-    $pythons = gci $python -File -Recurse
-}
+$pythons = gci $python -Recurse
 
 if ($dependencies) {
     foreach($py in $pythons) {
@@ -20,7 +17,7 @@ if ($dependencies) {
     }
 }
 
-$args = "--color=no --full-trace -q"
+$args = "--color=no -q"
 if ($testfilter) {
     $args = "$args -k `"$testfilter`""
 }
@@ -37,7 +34,7 @@ try {
         if ($rfparent) {
             mkdir $rfparent -Force | Out-Null
         }
-        $args = "$args --junit-xml=`"$resultfile`""
+        $args = "$args --junitxml=`"$resultfile`" --junitprefix=`"$resultprefix`""
     }
 
     if ($testroot -and $patterns) {
@@ -51,7 +48,9 @@ try {
     }
 
     foreach($py in $pythons) {
+        $env:winver = & $py -SEc "import sys;print(sys.winver)"
         Invoke-VstsTool $py "-m pytest $args"
+        $env:winver = $null
     }
 } finally {
     popd

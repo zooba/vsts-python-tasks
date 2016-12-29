@@ -7,11 +7,7 @@ $dependencies = Get-VstsInput -Name "dependencies"
 $skipexisting = Get-VstsInput -Name "skipexisting" -AsBool -Require
 $otherargs = Get-VstsInput -Name "otherargs"
 
-if (Test-Path $python) {
-    $py = $python
-} else {
-    $py = gci $python -File -Recurse | select -Last 1
-}
+$py = gci $python -Recurse | select -Last 1
 
 if ($dependencies) {
     Invoke-VstsTool $py "-m pip install $dependencies"

@@ -3,11 +3,7 @@ $outputdir = Get-VstsInput -Name "outputdir" -Default "$($env:BUILD_BINARIESDIRE
 $python = Get-VstsInput -Name "python" -Require
 $dependencies = Get-VstsInput -Name "dependencies"
 
-if (Test-Path $python) {
-    $py = $python
-} else {
-    $py = (gci $python -File -Recurse | select -Last 1)
-}
+$py = gci $python -Recurse | select -Last 1
 
 if ($dependencies) {
     Invoke-VstsTool $py "-m pip install $dependencies"

@@ -6,11 +6,7 @@ $python = Get-VstsInput -Name "python" -Require
 $dependencies = Get-VstsInput -Name "dependencies"
 $workingdir = Get-VstsInput -Name "workingdir" -Default "${env:BUILD_BINARIESDIRECTORY}"
 
-if (Test-Path $python) {
-    $pythons = @($python)
-} else {
-    $pythons = gci $python -File -Recurse
-}
+$pythons = gci $python -Recurse
 
 if ($universal) {
     $pythons = @($pythons | select -Last 1)
@@ -19,10 +15,13 @@ if ($universal) {
     $universalcmd = ""
 }
 
-foreach ($py in $pythons) {
-    if ($dependencies) {
+if ($dependencies) {
+    foreach ($py in $pythons) {
         Invoke-VstsTool $py "-m pip install $dependencies"
     }
+}
+
+foreach ($py in $pythons) {
     $arguments = "`"$setuppy`" build --build-base `"$workingdir`" $signcmd bdist_wheel -d `"$outputdir`" $universalcmd"
     Invoke-VstsTool $py $arguments (Resolve-Path $setuppy | Split-Path) -RequireExitCodeZero
 }

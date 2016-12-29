@@ -13,7 +13,7 @@
     "version": {
         "Major": 0,
         "Minor": 1,
-        "Patch": 0
+        "Patch": 1
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -58,9 +58,17 @@
             "name": "resultfile",
             "type": "filePath",
             "label": "Results File",
-            "defaultValue": "test-results.xml",
+            "defaultValue": "test-py%winver%.xml",
             "groupName": "tests",
             "helpMarkDown": "Location to store test results in JUnit format. Add a \"Publish Test Results\" task to associate these results with your build."
+        },
+        {
+            "name": "resultprefix",
+            "type": "string",
+            "label": "Results Prefix",
+            "defaultValue": "py%winver%",
+            "groupName": "tests",
+            "helpMarkDown": "Prefix to add to test names. The `%winver%` variable will contain `sys.winver` from the version of Python being executed."
         },
         {
             "name": "doctests",
