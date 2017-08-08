@@ -12,8 +12,8 @@
     "author": "Steve Dower",
     "version": {
         "Major": 0,
-        "Minor": 1,
-        "Patch": 21
+        "Minor": 2,
+        "Patch": 0
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -50,7 +50,8 @@
                 "python": "Latest 3.x (64-bit only)",
                 "python2;python2x86": "Latest 2.x",
                 "python2x86": "Latest 2.x (32-bit only)",
-                "python2": "Latest 2.x (64-bit only)"
+                "python2": "Latest 2.x (64-bit only)",
+                "pythondaily": "Latest daily build (64-bit only)"
             }
         },
         {
@@ -59,7 +60,7 @@
             "label": "Install prerelease versions",
             "defaultValue": false,
             "groupName": "versions",
-            "helpMarkDown": "Allow prerelease versions of Python to be installed."
+            "helpMarkDown": "Allow prerelease versions of Python to be installed. (Not required to get daily builds.)"
         },
         {
             "name": "versionlist",
@@ -84,7 +85,7 @@
             "label": "NuGet Arguments",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Additional arguments passed to NuGet.exe pack. [More Information](https://docs.nuget.org/consume/command-line-reference#user-content-pack-command).",
+            "helpMarkDown": "Additional arguments passed to NuGet.exe install. [More Information](https://docs.microsoft.com/nuget/tools/nuget-exe-cli-reference#install).",
             "groupName": "advanced"
         },
         {

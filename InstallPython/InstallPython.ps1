@@ -52,6 +52,10 @@ try {
             $ngArgs = "$ngArgs -Source $nuGetSource";
         }
 
+        if ($vspec -match 'pythondaily') {
+            $ngArgs = "$ngArgs -FallbackSource https://www.myget.org/F/python/api/v3/index.json";
+        }
+
         if ($vspec -match '^(.+?)==(.+)$') {
             $ngArgs = "$ngArgs $($Matches[1]) -Version $($Matches[2])";
         } else {

@@ -206,3 +206,4 @@ ModelManifest.xml
 /Package
 
 *.vsix
+ps_modules/
