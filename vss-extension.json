@@ -1,10 +1,11 @@
 {
     "manifestVersion": 1,
     "id": "python",
-    "version": "0.1.45",
+    "version": "0.1.47",
     "name": "Python build tools",
     "description": "Visual Studio Team Services extension for Python developers.",
     "publisher": "SteveDower",
+    "public": true,
     "targets": [
         { "id": "Microsoft.VisualStudio.Services" }
     ],
@@ -12,7 +13,11 @@
         "Build and release"
     ],
     "icons": {
-        "default": "images/logo.png"
+        "default": "images/logo_big.png"
+    },
+    "content": {
+        "details": { "path": "overview.md" },
+        "license": { "path": "LICENSE.md" }
     },
     "contributions": [
         {
