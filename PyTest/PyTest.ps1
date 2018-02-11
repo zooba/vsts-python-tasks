@@ -8,6 +8,7 @@ $python = Get-VstsInput -Name "python" -Require
 $dependencies = Get-VstsInput -Name "dependencies"
 $clearcache = Get-VstsInput -Name "clearcache" -AsBool
 $tempdir = Get-VstsInput -Name "tempdir"
+$abortOnFail = Get-VstsInput -Name "abortOnFail" -AsBool
 
 $pythons = gci $python -Recurse
 
@@ -49,8 +50,15 @@ try {
 
     foreach($py in $pythons) {
         $env:winver = & $py -SEc "import sys;print(sys.winver)"
-        Invoke-VstsTool $py "-m pytest $args"
-        $env:winver = $null
+        try {
+            if ($abortOnFail) {
+                Invoke-VstsTool $py "-m pytest $args" -RequireExitCodeZero
+            } else {
+                Invoke-VstsTool $py "-m pytest $args"
+            }
+        } finally {
+            $env:winver = $null
+        }
     }
 } finally {
     popd

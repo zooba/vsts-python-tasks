@@ -1,7 +1,7 @@
 {
     "id": "1D59D2E4-DD7D-4172-9A13-E519CF2AFCAC",
     "name": "BuildWheel",
-    "friendlyName": "Build Python wheels (Experimental)",
+    "friendlyName": "Build Python wheels",
     "description": "Creates wheels using all installed copies of Python.",
     "helpMarkDown": "[More Information](https://aka.ms/python)",
     "category": "Build",
@@ -12,7 +12,7 @@
     "author": "Steve Dower",
     "version": {
         "Major": 0,
-        "Minor": 3,
+        "Minor": 4,
         "Patch": 0
     },
     "minimumAgentVersion": "2.0",

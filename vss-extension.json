@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "python",
-    "version": "0.1.49",
+    "version": "0.1.53",
     "name": "Python build tools",
     "description": "Visual Studio Team Services extension for Python developers.",
     "publisher": "SteveDower",
@@ -82,6 +82,33 @@
             "properties": {
                 "name": "SetVersion"
             }
+        },
+        {
+            "id": "PythonScript",
+            "description": "Runs a script with one or more interpreters",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [ "ms.vss-distributed-task.tasks" ],
+            "properties": {
+                "name": "PythonScript"
+            }
+        },
+        {
+            "id": "RunNotebook",
+            "description": "Runs a Jupyter Notebook and saves the output as HTML",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [ "ms.vss-distributed-task.tasks" ],
+            "properties": {
+                "name": "RunNotebook"
+            }
+        },
+        {
+            "id": "CondaCreate",
+            "description": "Creates an environment using conda",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [ "ms.vss-distributed-task.tasks" ],
+            "properties": {
+                "name": "CondaCreate"
+            }
         }
     ],
     "files": [
@@ -91,6 +118,9 @@
         { "path": "BuildWheel" },
         { "path": "BuildSDist" },
         { "path": "PyTest" },
-        { "path": "SetVersion" }
+        { "path": "SetVersion" },
+        { "path": "PythonScript" },
+        { "path": "RunNotebook" },
+        { "path": "CondaCreate" }
     ]
 }

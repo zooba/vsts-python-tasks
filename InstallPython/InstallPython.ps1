@@ -15,15 +15,20 @@ if ($clean) {
     rmdir "$outputdir\python*" -Recurse -Force
 }
 
-$useBuiltinNuGetExe = !$nuGetPath
-
-if ($useBuiltinNuGetExe) {
-    $nuGetPath = (Get-Command -Name '.\NuGet.exe' -EA 0).Source
-}
+$useBuiltinNuGetExe = $false
 
 if (-not $nuGetPath) {
-    throw ("Unable to locate nuget.exe")
+    $useBuiltinNuGetExe = $true
+    $nuGetPath = (Get-Command -Name '.\NuGet.exe' -EA 0).Source
+    if (-not $nuGetPath) {
+        Invoke-WebRequest https://aka.ms/nugetclidl -OutFile NuGet.exe
+        $nuGetPath = (Get-Command -Name '.\NuGet.exe' -EA 0).Source
+        if (-not $nuGetPath) {
+            throw ("Unable to locate nuget.exe")
+        }
+    }
 }
+
 
 $initialNuGetExtensionsPath = $env:NUGET_EXTENSIONS_PATH
 

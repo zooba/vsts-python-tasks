@@ -2,7 +2,7 @@
     "id": "75A63AC0-BAB7-4DAB-93F6-65FD41F51F09",
     "name": "PythonScript",
     "friendlyName": "Run Python script (Experimental)",
-    "description": "Runs a script with one or more .",
+    "description": "Runs a script with one or more interpreters.",
     "helpMarkDown": "[More Information](https://aka.ms/python)",
     "category": "Build",
     "visibility": [
@@ -58,7 +58,7 @@
             "name": "pythonpattern",
             "type": "multiLine",
             "label": "Python Search Pattern",
-            "defaultValue": "**\python.exe",
+            "defaultValue": "**\\python.exe",
             "groupName": "advanced",
             "helpMarkDown": "Search pattern for Python executables."
         },

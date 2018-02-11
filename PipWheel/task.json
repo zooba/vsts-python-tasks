@@ -1,7 +1,7 @@
 {
     "id": "AF64316E-74FD-42F1-A0BD-2D7F72404AA6",
     "name": "PipWheel",
-    "friendlyName": "Build Python wheels with pip (Experimental)",
+    "friendlyName": "Build Python wheels with pip",
     "description": "Creates wheels using pip from all installed copies of Python.",
     "helpMarkDown": "[More Information](https://aka.ms/python)",
     "category": "Build",
@@ -12,7 +12,7 @@
     "author": "Steve Dower",
     "version": {
         "Major": 0,
-        "Minor": 3,
+        "Minor": 4,
         "Patch": 0
     },
     "minimumAgentVersion": "2.0",
