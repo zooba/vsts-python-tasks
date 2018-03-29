@@ -12,6 +12,18 @@
     "categories": [
         "Build and release"
     ],
+    "links": {
+        "repository": {
+            "uri": "https://github.com/zooba/vsts-python-tasks"
+        },
+        "issues": {
+            "uri": "https://github.com/zooba/vsts-python-tasks/issues"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/zooba/vsts-python-tasks"
+    },
     "icons": {
         "default": "images/logo_big.png"
     },
