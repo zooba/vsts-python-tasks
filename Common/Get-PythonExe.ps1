@@ -27,7 +27,7 @@ function Get-PythonExe {
         if ($Default) {
             return $Default
         }
-        Write-Error "Failed to find Python version to use"
+        Write-Error "Failed to find Python version to use."
     } finally {
         Trace-VstsLeavingInvocation $MyInvocation
     }

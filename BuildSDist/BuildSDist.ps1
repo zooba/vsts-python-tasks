@@ -16,7 +16,7 @@ try {
         Invoke-VstsTool $python "-m pip install $dependencies" $workingdir
     }
 
-    $arguments = '"{0} sdist -d "{1}"' -f $setuppy, $outputdir
+    $arguments = '"{0}" sdist -d "{1}"' -f $setuppy, $outputdir
     Invoke-VstsTool $python $arguments $workingdir -RequireExitCodeZero
 
     Set-VstsTaskVariable -Name dist -Value $outputdir
