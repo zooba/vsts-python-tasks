@@ -17,8 +17,8 @@ try {
     }
 
     $args = "-r $repository"
-    if (Test-Path $pypirc -PathType Leaf) {
-        $args = '{0} --config-file "{1}"' -f $args, $pypirc
+    if ($pypirc -and (Test-Path $pypirc -PathType Leaf)) {
+        $args = '{0} --config-file "{1}"' -f ($args, $pypirc)
     }
     if ($skipexisting) {
         $args = "$args --skip-existing"
@@ -34,14 +34,14 @@ try {
             if (Test-Path $distdir -PathType Container) {
                 $distdir = Join-Path $distdir '*'
             }
-            $arguments = '-m twine upload "{0}" {1}' -f $distdir, $args
+            $arguments = '-m twine upload "{0}" {1}' -f ($distdir, $args)
             Invoke-VstsTool $python $arguments -RequireExitCodeZero
         } else {
             $d1 = Get-VstsTaskVariable -Name "BuildSDist.dist"
             $d2 = Get-VstsTaskVariable -Name "BuildWheel.dist"
             $d3 = Get-VstsTaskVariable -Name "PipWheel.dist"
             ($d1, $d2, $d3) | ?{ $_ } | select -Unique | ?{ Test-Path $_ -PathType Container } | %{
-                $arguments = '-m twine upload "{0}" {1}' -f (Join-Path $_ '*'), $args
+                $arguments = '-m twine upload "{0}" {1}' -f ((Join-Path $_ '*'), $args)
                 Invoke-VstsTool $python $arguments -RequireExitCodeZero
             }
         }
