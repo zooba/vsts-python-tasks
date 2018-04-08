@@ -37,7 +37,7 @@ try {
             Invoke-VstsTool $py "-m pip install pyfindvs" $workingdir
         }
 
-        $arguments = '"{0}" {1} build --build-base "{2}" {3} bdist_wheel -d "{4}" {5}"' -f 
+        $arguments = '"{0}" {1} build --build-base "{2}" {3} bdist_wheel -d "{4}" {5}' -f 
             $setuppy, $usemsbuildcmd, $builddir, $signcmd, $outputdir, $universalcmd
 
         Invoke-VstsTool $py $arguments $workingdir -RequireExitCodeZero
