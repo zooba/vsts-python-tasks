@@ -32,14 +32,14 @@ try {
         $env:TWINE_PASSWORD = $password
         if ($distdir) {
             $arguments = '-m twine upload "{0}" {1}' -f $distdir, $args
-            Invoke-VstsTool $py $arguments -RequireExitCodeZero
+            Invoke-VstsTool $python $arguments -RequireExitCodeZero
         } else {
             $d1 = Get-VstsTaskVariable -Name "BuildSDist.dist"
             $d2 = Get-VstsTaskVariable -Name "BuildWheel.dist"
             $d3 = Get-VstsTaskVariable -Name "PipWheel.dist"
             ($d1, $d2, $d3) | select -Unique | ?{ Test-Path $_ } | %{
                 $arguments = '-m twine upload "{0}" {1}' -f $_, $args
-                Invoke-VstsTool $py $arguments -RequireExitCodeZero
+                Invoke-VstsTool $python $arguments -RequireExitCodeZero
             }
         }
     } finally {
