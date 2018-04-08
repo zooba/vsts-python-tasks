@@ -29,7 +29,7 @@ try {
         $workingdir = (Resolve-Path $setuppy | Split-Path)
     }
 
-    foreach ($py in $pythons) {
+    foreach ($py in $python) {
         if ($dependencies) {
             Invoke-VstsTool $py "-m pip install $dependencies" $workingdir
         }

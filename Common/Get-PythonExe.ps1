@@ -9,6 +9,16 @@ function Get-PythonExe {
 
     try {
         $python = Get-VstsInput -Name $Name
+
+        if ($All) {
+            if (-not $python) {
+                $python = Get-VstsTaskVariable -Name "InstallPython.allPythonLocations"
+                if ($python) {
+                    return $python -split ';'
+                }
+            }
+        }
+
         if (-not $python) {
             $python = Get-VstsTaskVariable -Name "UsePythonVersion.pythonLocation"
         }
