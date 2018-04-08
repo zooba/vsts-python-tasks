@@ -1,8 +1,8 @@
 function Get-PythonExe {
-    [CmdletBinding]
+    [CmdletBinding()]
     param ([switch]$All,
            [string]$Name="python",
-           [string]$ExeName="python.exe"
+           [string]$ExeName="python.exe",
            [string]$Default="")
 
     Trace-VstsEnteringInvocation $MyInvocation
