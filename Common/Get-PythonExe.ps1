@@ -8,7 +8,7 @@ function Get-PythonExe {
     Trace-VstsEnteringInvocation $MyInvocation
 
     try {
-        $python = Get-VstsInput -Name $InputName
+        $python = Get-VstsInput -Name $Name
         if (-not $python) {
             $python = Get-VstsTaskVariable -Name "UsePythonVersion.pythonLocation"
         }
