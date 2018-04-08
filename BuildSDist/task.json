@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 3
+        "Patch": 4
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -41,7 +41,7 @@
         },
         {
             "name": "outputdir",
-            "type": "filePath",
+            "type": "string",
             "label": "Output Folder",
             "defaultValue": "",
             "groupName": "packages",
@@ -65,7 +65,7 @@
         },
         {
             "name": "workingdir",
-            "type": "filePath",
+            "type": "string",
             "label": "Working Folder",
             "defaultValue": "",
             "groupName": "advanced",

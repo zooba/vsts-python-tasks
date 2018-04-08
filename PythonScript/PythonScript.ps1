@@ -2,7 +2,8 @@ Trace-VstsEnteringInvocation $MyInvocation
 try {
     . $PSScriptRoot\Get-PythonExe.ps1
 
-    $arguments = Get-VstsInput -Name "arguments" -Require
+    $script = Get-VstsInput -Name "script"
+    $args = Get-VstsInput -Name "arguments"
     $workingdir = Get-VstsInput -Name "workingdir" -Default $env:SYSTEM_DEFAULTWORKINGDIRECTORY
     $onlyone = Get-VstsInput -Name "onlyone" -AsBool
     $abortOnFail = Get-VstsInput -Name "abortOnFail" -AsBool
@@ -14,7 +15,13 @@ try {
         $python = Get-PythonExe -All -Name "python"
     }
 
-    foreach ($py in $pythons) {
+    if (Test-Path $script -PathType Leaf) {
+        $arguments = '"{0}" {1}' -f $script, $args
+    } else {
+        $arugments = $args
+    }
+
+    foreach ($py in $python) {
         if ($dependencies) {
             Invoke-VstsTool $py "-m pip install $dependencies" $workingdir
         }

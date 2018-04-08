@@ -2,7 +2,7 @@ Trace-VstsEnteringInvocation $MyInvocation
 try {
     . $PSScriptRoot\Get-PythonExe.ps1
 
-    $distdir = Get-VstsInput -Name "distdir" -Default ""
+    $distdir = Get-VstsInput -Name "distdir"
     $repository = Get-VstsInput -Name "repository" -Require
     $pypirc = Get-VstsInput -Name "pypirc"
     $username = Get-VstsInput -Name "username"

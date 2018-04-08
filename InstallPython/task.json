@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 1
+        "Patch": 2
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -83,7 +83,7 @@
             "name": "outputdir",
             "type": "filePath",
             "label": "Install Folder",
-            "defaultValue": "",
+            "defaultValue": "$(Build.BinariesDirectory)",
             "groupName": "advanced",
             "helpMarkDown": "Folder where packages will be installed. By default, `$(Build.BinariesDirectory)` will be used. The final install locations will be stored in output variables."
         },

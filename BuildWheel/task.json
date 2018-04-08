@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 4
+        "Patch": 5
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -41,7 +41,7 @@
         },
         {
             "name": "outputdir",
-            "type": "filePath",
+            "type": "string",
             "label": "Output Folder",
             "defaultValue": "",
             "groupName": "packages",
@@ -89,7 +89,7 @@
         },
         {
             "name": "builddir",
-            "type": "filePath",
+            "type": "string",
             "label": "Build Folder",
             "defaultValue": "",
             "groupName": "advanced",
@@ -97,7 +97,7 @@
         },
         {
             "name": "workingdir",
-            "type": "filePath",
+            "type": "string",
             "label": "Working Folder",
             "defaultValue": "",
             "groupName": "advanced",

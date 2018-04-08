@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 2
+        "Patch": 3
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -28,19 +28,27 @@
             "isExpanded": false
         }
     ],
-    "instanceNameFormat": "Run $(script)",
+    "instanceNameFormat": "Run $(script) $(arguments)",
     "inputs": [
+        {
+            "name": "script",
+            "type": "filePath",
+            "label": "Script",
+            "defaultValue": "",
+            "groupName": "script",
+            "helpMarkDown": "Script file to run. If omitted, the arguments below are passed directly."
+        },
         {
             "name": "arguments",
             "type": "string",
-            "label": "Script",
+            "label": "Arguments",
             "defaultValue": "",
             "groupName": "script",
             "helpMarkDown": "Arguments to Python. This should include at least a script filename, as well as arguments before and after."
         },
         {
             "name": "workingdir",
-            "type": "filePath",
+            "type": "string",
             "label": "Working Directory",
             "defaultValue": "",
             "groupName": "script",

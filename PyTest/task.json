@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 0
+        "Patch": 1
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -96,7 +96,7 @@
         },
         {
             "name": "workingdir",
-            "type": "filePath",
+            "type": "string",
             "label": "Working Folder",
             "defaultValue": "",
             "groupName": "advanced",
@@ -112,7 +112,7 @@
         },
         {
             "name": "tempdir",
-            "type": "filePath",
+            "type": "string",
             "label": "Temp directory",
             "defaultValue": "",
             "groupName": "advanced",
