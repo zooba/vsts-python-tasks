@@ -3,7 +3,7 @@
     "name": "PyTest",
     "friendlyName": "Run Python tests",
     "description": "Runs tests using PyTest in all available installs of Python.",
-    "helpMarkDown": "[More Information](https://aka.ms/python)",
+    "helpMarkDown": "The *Run Python tests* task will install and use [PyTest](https://pytest.org) to run your test suite. You should add a \"Publish Test Results\" task after this in order to see your test status in the build results page.",
     "category": "Test",
     "visibility": [
         "Build",
@@ -11,8 +11,8 @@
     ],
     "author": "Steve Dower",
     "version": {
-        "Major": 0,
-        "Minor": 4,
+        "Major": 1,
+        "Minor": 0,
         "Patch": 0
     },
     "minimumAgentVersion": "2.0",
@@ -79,20 +79,28 @@
             "helpMarkDown": "Select to also execute all doctests discovered in test files."
         },
         {
-            "name": "python",
-            "type": "filePath",
-            "label": "Python",
-            "defaultValue": "$(Build.BinariesDirectory)\\python.exe",
-            "groupName": "advanced",
-            "helpMarkDown": "Search path for installed Python versions."
-        },
-        {
             "name": "dependencies",
             "type": "string",
             "label": "Dependencies",
             "defaultValue": "pytest",
-            "groupName": "advanced",
+            "groupName": "tests",
             "helpMarkDown": "Packages to install prior to running tests. Prefix with `--upgrade` to ensure you have the latest version."
+        },
+        {
+            "name": "python",
+            "type": "string",
+            "label": "Python",
+            "defaultValue": "",
+            "groupName": "advanced",
+            "helpMarkDown": "Semi-colon separated list of directories containing `python.exe` to use. By default, all installs added by either the Install Python or Use Python task will be used."
+        },
+        {
+            "name": "workingdir",
+            "type": "filePath",
+            "label": "Working Folder",
+            "defaultValue": "",
+            "groupName": "advanced",
+            "helpMarkDown": "Working directory for running the build. By default, the directory containing setup.py will be used."
         },
         {
             "name": "clearcache",
@@ -106,9 +114,9 @@
             "name": "tempdir",
             "type": "filePath",
             "label": "Temp directory",
-            "defaultValue": "$(Build.BinariesDirectory)\\test",
+            "defaultValue": "",
             "groupName": "advanced",
-            "helpMarkDown": "Base temporary directory."
+            "helpMarkDown": "Base temporary directory. By default, uses $(Build.BinariesDirectory)\\test, and each Python version creates its own subdirectory."
         },
         {
             "name": "abortOnFail",

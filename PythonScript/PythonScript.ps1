@@ -1,19 +1,30 @@
-$arguments = Get-VstsInput -Name "arguments" -Require
-$workingdir = Get-VstsInput -Name "workingdir" -Default $env:SYSTEM_DEFAULTWORKINGDIRECTORY
-$pythonroot = Get-VstsInput -Name "pythonroot" -Default $env:BUILD_BINARIESDIRECTORY
-$pythonpattern = Get-VstsInput -Name "pythonpattern" -Require
-$onlyone = Get-VstsInput -Name "onlyone" -AsBool
-$dependencies = Get-VstsInput -Name "dependencies"
+Trace-VstsEnteringInvocation $MyInvocation
+try {
+    . $PSScriptRoot\Get-PythonExe.ps1
 
-$pythons = Find-VstsMatch $pythonroot $pythonpattern
-if ($onlyone) {
-    $pythons = $pythons | select -last 1
-}
+    $arguments = Get-VstsInput -Name "arguments" -Require
+    $workingdir = Get-VstsInput -Name "workingdir" -Default $env:SYSTEM_DEFAULTWORKINGDIRECTORY
+    $onlyone = Get-VstsInput -Name "onlyone" -AsBool
+    $abortOnFail = Get-VstsInput -Name "abortOnFail" -AsBool
+    $dependencies = Get-VstsInput -Name "dependencies"
 
-foreach ($py in $pythons) {
-    if ($dependencies) {
-        Invoke-VstsTool $py "-m pip install $dependencies"
+    if ($onlyone) {
+        $python = Get-PythonExe -Name "python"
+    } else {
+        $python = Get-PythonExe -All -Name "python"
     }
 
-    Invoke-VstsTool $py $arguments $workingdir
+    foreach ($py in $pythons) {
+        if ($dependencies) {
+            Invoke-VstsTool $py "-m pip install $dependencies" $workingdir
+        }
+
+        if ($abortOnFail) {
+            Invoke-VstsTool $py $arguments $workingdir -RequireExitCodeZero
+        } else {
+            Invoke-VstsTool $py $arguments $workingdir
+        }
+    }
+} finally {
+    Trace-VstsLeavingInvocation $MyInvocation
 }

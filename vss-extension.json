@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "python",
-    "version": "0.1.53",
+    "version": "1.0.0",
     "name": "Python build tools",
     "description": "Visual Studio Team Services extension for Python developers.",
     "publisher": "SteveDower",

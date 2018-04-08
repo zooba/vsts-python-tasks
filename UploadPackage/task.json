@@ -1,9 +1,9 @@
 {
     "id": "EB33011F-0C71-47D4-83C3-359D5D40925F",
     "name": "UploadPackage",
-    "friendlyName": "Upload Python package (Experimental)",
+    "friendlyName": "Upload Python package",
     "description": "Uploads built packages to PyPI.",
-    "helpMarkDown": "[More Information](https://aka.ms/python)",
+    "helpMarkDown": "The *Upload Python package* task uses `twine` to upload your built packages to the [Python Package Index](https://pypi.org). You may also select to upload to the test instance.\n\nYour username and password are required. It is recommended to add these as encrypted build variables rather than adding them directly to the task.",
     "category": "Package",
     "visibility": [
         "Build",
@@ -11,8 +11,8 @@
     ],
     "author": "Steve Dower",
     "version": {
-        "Major": 0,
-        "Minor": 3,
+        "Major": 1,
+        "Minor": 0,
         "Patch": 0
     },
     "minimumAgentVersion": "2.0",
@@ -39,10 +39,10 @@
             "name": "distdir",
             "type": "filePath",
             "label": "Packages",
-            "defaultValue": "$(Build.BinariesDirectory)\\dist\\*",
-            "required": true,
+            "defaultValue": "",
+            "required": false,
             "groupName": "package",
-            "helpMarkDown": "Location of your distribution files. Should be a single file or wildcard."
+            "helpMarkDown": "Location of your distribution files. Should be a single file or wildcard. By default, uses the output directories of previous Build SDist, Build Wheel and Pip Wheel tasks."
         },
         {
             "name": "repository",
@@ -64,7 +64,7 @@
             "name": "username",
             "type": "string",
             "label": "Username",
-            "required": true,
+            "defaultValue": "",
             "groupName": "repository",
             "helpMarkDown": "The username to use for authenticating with the index server"
         },
@@ -72,18 +72,25 @@
             "name": "password",
             "type": "string",
             "label": "Password",
-            "required": true,
+            "defaultValue": "",
             "groupName": "repository",
             "helpMarkDown": "The password to use for authenticating with the index server. To encrypt this value, use a build variable with its lock enabled."
         },
         {
-            "name": "python",
+            "name": "pypirc",
             "type": "filePath",
+            "label": "PyPI Config",
+            "defaultValue": "",
+            "groupName": "repository",
+            "helpMarkDown": "The `.pypirc` file to use for publishing. If this file contains credentials, we recommend using the \"Download Secure File\" task."
+        },
+        {
+            "name": "python",
+            "type": "string",
             "label": "Python",
-            "defaultValue": "$(Build.BinariesDirectory)\\python.exe",
-            "required": true,
+            "defaultValue": "",
             "groupName": "advanced",
-            "helpMarkDown": "Search path for installed Python versions. This will be passed to Get-ChildItem and the last match will be used to upload."
+            "helpMarkDown": "Directory containing the `python.exe` to use. By default, the last install added by either the Install Python or Use Python task will be used."
         },
         {
             "name": "dependencies",

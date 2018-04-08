@@ -1,9 +1,9 @@
 {
     "id": "75A63AC0-BAB7-4DAB-93F6-65FD41F51F09",
     "name": "PythonScript",
-    "friendlyName": "Run Python script (Experimental)",
+    "friendlyName": "Run Python script",
     "description": "Runs a script with one or more interpreters.",
-    "helpMarkDown": "[More Information](https://aka.ms/python)",
+    "helpMarkDown": "The *Run Python script* task will let you enter any script or command to run with the copies of Python installed by the Install Python task.\n\nYou can choose whether to run the script once for each installed Python or only once (with the latest version available).",
     "category": "Build",
     "visibility": [
         "Build",
@@ -11,9 +11,9 @@
     ],
     "author": "Steve Dower",
     "version": {
-        "Major": 0,
-        "Minor": 3,
-        "Patch": 1
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 0
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -47,28 +47,28 @@
             "helpMarkDown": "Folder where Python will be run."
         },
         {
-            "name": "pythonroot",
-            "type": "filePath",
-            "label": "Python Search Root",
-            "defaultValue": "$(Build.BinariesDirectory)",
-            "groupName": "advanced",
-            "helpMarkDown": "Root search path for installed Python versions."
-        },
-        {
-            "name": "pythonpattern",
-            "type": "multiLine",
-            "label": "Python Search Pattern",
-            "defaultValue": "**\\python.exe",
-            "groupName": "advanced",
-            "helpMarkDown": "Search pattern for Python executables."
-        },
-        {
             "name": "onlyone",
             "type": "boolean",
             "label": "Only run once",
             "defaultValue": true,
+            "groupName": "script",
+            "helpMarkDown": "When checked, only the latest Python version is used to execute the script. Otherwise, all discovered Python versions are used."
+        },
+        {
+            "name": "abortOnFail",
+            "type": "boolean",
+            "label": "Fail on non-zero exit code",
+            "defaultValue": false,
+            "groupName": "script",
+            "helpMarkDown": "Aborts the build by failing this task if the script returns a non-zero exit code."
+        },
+        {
+            "name": "python",
+            "type": "string",
+            "label": "Python",
+            "defaultValue": "",
             "groupName": "advanced",
-            "helpMarkDown": "When checked, only the last search result is used to execute the script. Otherwise, all results are used."
+            "helpMarkDown": "Directory or directories containing the `python.exe` to use. By default, the last install added by either the Install Python or Use Python task will be used."
         },
         {
             "name": "dependencies",

@@ -3,7 +3,7 @@
     "name": "InstallPython",
     "friendlyName": "Install Python",
     "description": "Installs one or more Python versions into your build environment",
-    "helpMarkDown": "[More Information](https://aka.ms/python)",
+    "helpMarkDown": "The *Install Python* task will install one or more copies of Python using packages from [nuget.org](https://nuget.org). These packages are part of the official release of CPython.\n\nMost other tasks assume you have already run this task to install the desired runtimes. The folder where they are installed is customizable, but be aware that you will need to update subsequent task configuration if you change this.",
     "category": "Utility",
     "visibility": [
         "Build",
@@ -11,8 +11,8 @@
     ],
     "author": "Steve Dower",
     "version": {
-        "Major": 0,
-        "Minor": 4,
+        "Major": 1,
+        "Minor": 0,
         "Patch": 0
     },
     "minimumAgentVersion": "2.0",
@@ -72,12 +72,20 @@
             "helpMarkDown": "List of specific versions to install, e.g. `python==3.5.2;python==3.6.0`. If specified, the version pack option is ignored."
         },
         {
+            "name": "dependencies",
+            "type": "string",
+            "label": "Dependencies",
+            "defaultValue": "",
+            "groupName": "packages",
+            "helpMarkDown": "Packages to install or upgrade immediately after installing Python. Packages are always upgraded."
+        },
+        {
             "name": "outputdir",
             "type": "filePath",
             "label": "Install Folder",
-            "defaultValue": "$(Build.BinariesDirectory)",
-            "groupName": "packages",
-            "helpMarkDown": "Folder where packages will be installed. By default, `$(Build.BinariesDirectory)` will be used."
+            "defaultValue": "",
+            "groupName": "advanced",
+            "helpMarkDown": "Folder where packages will be installed. By default, `$(Build.BinariesDirectory)` will be used. The final install locations will be stored in output variables."
         },
         {
             "name": "nuGetAdditionalArgs",
@@ -113,6 +121,16 @@
             "defaultValue": true,
             "helpMarkDown": "Optionally delete all python* directories in the output",
             "groupName": "advanced"
+        }
+    ],
+    "outputVariables": [
+        {
+            "name": "pythonLocation",
+            "description": "The directory of the latest installed Python distribution. Use this in subsequent tasks to access this installation of Python"
+        },
+        {
+            "name": "allPythonLocations",
+            "description": "A semicolon separated list of all Python distributions installed by this task."
         }
     ],
     "execution": {
