@@ -10,30 +10,27 @@ function Get-PythonExe {
     try {
         $python = Get-VstsInput -Name $Name
 
-        if ($All) {
-            if (-not $python) {
+        if (-not $python) {
+            if ($All) {
                 $python = Get-VstsTaskVariable -Name "InstallPython.allPythonLocations"
-                if ($python) {
-                    return $python -split ';'
+            } else {
+                $python = Get-VstsTaskVariable -Name "InstallPython.pythonLocation"
+                if (-not $python) {
+                    $python = Get-VstsTaskVariable -Name "UsePythonVersion.pythonLocation"
                 }
             }
         }
 
-        if (-not $python) {
-            $python = Get-VstsTaskVariable -Name "UsePythonVersion.pythonLocation"
-        }
-        if (-not $python) {
-            $python = Get-VstsTaskVariable -Name "InstallPython.pythonLocation"
-        }
         if ($python) {
-            if (Test-Path $python -PathType Leaf) {
-                return $python
-            }
-            $python = Join-Path $python $ExeName
-            if (Test-Path $python -PathType Leaf) {
-                return $python
-            }
+            return ($python -split ';') | %{
+                if (Test-Path $_ -PathType Leaf) {
+                    return $_
+                } elseif (Test-Path (Join-Path $_ $ExeName) -PathType Leaf) {
+                    return Join-Path $_ $ExeName
+                }
+            } | select -Unique
         }
+
         if ($Default) {
             return $Default
         }
