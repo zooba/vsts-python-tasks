@@ -33,7 +33,7 @@ try {
         if ($dependencies) {
             Invoke-VstsTool $py "-m pip install $dependencies" $workingdir
         }
-        if ($usemsbuild -and -not ($dependencies -match '\bpyfindvs\b') {
+        if ($usemsbuild -and -not ($dependencies -match '\bpyfindvs\b')) {
             Invoke-VstsTool $py "-m pip install pyfindvs" $workingdir
         }
 
