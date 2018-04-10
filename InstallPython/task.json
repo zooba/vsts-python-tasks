@@ -3,7 +3,7 @@
     "name": "InstallPython",
     "friendlyName": "Install Python",
     "description": "Installs one or more Python versions into your build environment",
-    "helpMarkDown": "The *Install Python* task will install one or more copies of Python using packages from [nuget.org](https://nuget.org). These packages are part of the official release of CPython.\n\nMost other tasks assume you have already run this task to install the desired runtimes. The folder where they are installed is customizable, but be aware that you will need to update subsequent task configuration if you change this.",
+    "helpMarkDown": "The *Install Python* task will install a of Python using packages from [nuget.org](https://nuget.org) and add them to `PATH`. These packages are part of the official release of CPython.\n\nMost other tasks assume you have already run this task to install the desired runtimes. The folder where they are installed is customizable, but be aware that you will need to update subsequent task configuration if you change this.",
     "category": "Utility",
     "visibility": [
         "Build",
@@ -13,13 +13,13 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 2
+        "Patch": 3
     },
     "minimumAgentVersion": "2.0",
     "groups": [
         {
-            "name": "versions",
-            "displayName": "Versions",
+            "name": "version",
+            "displayName": "Python",
             "isExpanded": true
         },
         {
@@ -36,22 +36,22 @@
     "instanceNameFormat": "Install Python",
     "inputs": [
         {
-            "name": "versions",
+            "name": "version",
             "type": "pickList",
             "label": "Version pack",
-            "defaultValue": "python;pythonx86;python2;python2x86",
+            "defaultValue": "python",
             "helpMarkDown": "Select a set of versions to install.",
             "required" : true,
-            "groupName": "versions",
+            "groupName": "version",
             "options": {
-                "python;pythonx86;python2;python2x86": "Latest 3.x and 2.x",
-                "python;pythonx86": "Latest 3.x",
-                "pythonx86": "Latest 3.x (32-bit only)",
-                "python": "Latest 3.x (64-bit only)",
-                "python2;python2x86": "Latest 2.x",
-                "python2x86": "Latest 2.x (32-bit only)",
-                "python2": "Latest 2.x (64-bit only)",
+                "python": "Latest 3.x (64-bit)",
+                "pythonx86": "Latest 3.x (32-bit)",
+                "python2": "Latest 2.x (64-bit)",
+                "python2x86": "Latest 2.x (32-bit)",
                 "pythondaily": "Latest daily build (64-bit only)"
+            },
+            "properties": {
+                "EditableOptions": "True"
             }
         },
         {
@@ -59,17 +59,8 @@
             "type": "boolean",
             "label": "Install prerelease versions",
             "defaultValue": false,
-            "groupName": "versions",
+            "groupName": "version",
             "helpMarkDown": "Allow prerelease versions of Python to be installed. (Not required to get daily builds.)"
-        },
-        {
-            "name": "versionlist",
-            "type": "string",
-            "label": "Versions",
-            "defaultValue": "",
-            "required": false,
-            "groupName": "versions",
-            "helpMarkDown": "List of specific versions to install, e.g. `python==3.5.2;python==3.6.0`. If specified, the version pack option is ignored."
         },
         {
             "name": "dependencies",
@@ -83,9 +74,9 @@
             "name": "outputdir",
             "type": "filePath",
             "label": "Install Folder",
-            "defaultValue": "$(Build.BinariesDirectory)",
+            "defaultValue": "$(Agent.ToolsDirectory)\\PythonNuget",
             "groupName": "advanced",
-            "helpMarkDown": "Folder where packages will be installed. By default, `$(Build.BinariesDirectory)` will be used. The final install locations will be stored in output variables."
+            "helpMarkDown": "Folder where packages will be installed. By default, `$(Agent.ToolsDirectory)\\PythonNuget` will be used. The final install locations will be stored in output variables and on `PATH`."
         },
         {
             "name": "nuGetAdditionalArgs",
@@ -93,44 +84,14 @@
             "label": "NuGet Arguments",
             "defaultValue": "",
             "required": false,
-            "helpMarkDown": "Additional arguments passed to NuGet.exe install. [More Information](https://docs.microsoft.com/nuget/tools/nuget-exe-cli-reference#install).",
-            "groupName": "advanced"
-        },
-        {
-            "name": "nuGetPath",
-            "type": "string",
-            "label": "Path to NuGet.exe",
-            "defaultValue": "",
-            "required": false,
-            "helpMarkDown": "Optionally supply the path to NuGet.exe",
-            "groupName": "advanced"
-        },
-        {
-            "name": "nuGetSource",
-            "type": "string",
-            "label": "Source URL",
-            "defaultValue": "",
-            "required": false,
-            "helpMarkDown": "Optionally supply the NuGet source to obtain the packages from.",
-            "groupName": "advanced"
-        },
-        {
-            "name": "clean",
-            "type": "boolean",
-            "label": "Clean existing installs",
-            "defaultValue": true,
-            "helpMarkDown": "Optionally delete all python* directories in the output",
-            "groupName": "advanced"
+            "groupName": "advanced",
+            "helpMarkDown": "Additional arguments passed to NuGet.exe install. [More Information](https://docs.microsoft.com/nuget/tools/nuget-exe-cli-reference#install)."
         }
     ],
     "outputVariables": [
         {
             "name": "pythonLocation",
             "description": "The directory of the latest installed Python distribution. Use this in subsequent tasks to access this installation of Python"
-        },
-        {
-            "name": "allPythonLocations",
-            "description": "A semicolon separated list of all Python distributions installed by this task."
         }
     ],
     "execution": {

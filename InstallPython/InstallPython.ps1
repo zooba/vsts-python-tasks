@@ -1,109 +1,82 @@
 Trace-VstsEnteringInvocation $MyInvocation
 try {
-    $versions = Get-VstsInput -Name "versions" -Require
+    $version = Get-VstsInput -Name "version" -Default "python"
     $prerelease = Get-VstsInput -Name "prerelease" -AsBool
-    $versionlist = Get-VstsInput -Name "versionlist"
-    $outputdir = Get-VstsInput -Name "outputdir" -Default $env:BUILD_BINARIESDIRECTORY
+    $outputdir = Get-VstsInput -Name "outputdir" -Default "$env:AGENT_TOOLSDIRECTORY\PythonNuget"
     $dependencies = Get-VstsInput -Name "dependencies"
     $nuGetAdditionalArgs = Get-VstsInput -Name "nuGetAdditionalArgs"
-    $nuGetPath = Get-VstsInput -Name "nuGetPath"
-    $nuGetSource = Get-VstsInput -Name "nuGetSource"
-    $clean = Get-VstsInput -Name "clean" -AsBool
 
-    if ($versionlist) {
-        $versions = $versionlist
-    }
-
-    if ($clean) {
-        rmdir "$outputdir\python*" -Recurse -Force
-    }
-
-    $useBuiltinNuGetExe = $false
-
-    if (-not $nuGetPath) {
-        $useBuiltinNuGetExe = $true
-        $nuGetPath = (Get-Command -Name '.\NuGet.exe' -EA 0).Source
-        if (-not $nuGetPath) {
-            Invoke-WebRequest https://aka.ms/nugetclidl -OutFile NuGet.exe
-            $nuGetPath = (Get-Command -Name '.\NuGet.exe' -EA 0).Source
-            if (-not $nuGetPath) {
-                throw ("Unable to locate nuget.exe")
+    $nugetPath = (Get-Command 'nuget.exe' -EA 0).Source
+    if (-not $nugetPath) {
+        $nugetPath = (gci "$env:AGENT_TOOLSDIRECTORY\nuget" -Directory) | `
+            sort -Descending | `
+            %{ Join-Path (Join-Path $_ 'x64'), (Join-Path $_ 'x86') 'nuget.exe' } | `
+            ?{ Test-Path $_ } | `
+            select -First 1
+        if (-not $nugetPath) {
+            Invoke-WebRequest https://aka.ms/nugetclidl -OutFile nuget.exe
+            $nugetPath = (Get-Command 'nuget.exe' -EA 0).Source
+            if (-not $nugetPath) {
+                throw "Unable to locate nuget.exe. Use the Nuget Tool Installer task to ensure it is available."
             }
         }
     }
 
+    if ($env:NUGET_EXTENSIONS_PATH) {
+        Write-Host "Detected NuGet extensions loader path. Environment variable NUGET_EXTENSIONS_PATH is set to: $env:NUGET_EXTENSIONS_PATH"
+    }
 
-    $initialNuGetExtensionsPath = $env:NUGET_EXTENSIONS_PATH
+    Write-Verbose "Installing $version to $outputdir"
 
-    $all_paths = "";
+    $ngArgs = 'install -OutputDirectory "{0}" {1}' -f $outputdir, $nuGetAdditionalArgs
 
-    try {
-        if ($env:NUGET_EXTENSIONS_PATH) {
-            if($useBuiltinNuGetExe) {
-                # NuGet.exe extensions only work with a single specific version of nuget.exe. This causes problems
-                # whenever we update nuget.exe on the agent.
-                $env:NUGET_EXTENSIONS_PATH = $null
-                Write-Warning "The NUGET_EXTENSIONS_PATH environment variable is set, but nuget.exe extensions are not supported when using the built-in NuGet implementation."
-            } else {
-                Write-Host "Detected NuGet extensions loader path. Environment variable NUGET_EXTENSIONS_PATH is set to: $env:NUGET_EXTENSIONS_PATH"
-            }
-        }
+    if ($prerelease -ieq "true") {
+        $ngArgs = "$ngArgs -Prerelease";
+    }
 
-        foreach ($vspec in ($versions -split ';')) {
-            Write-Verbose "Installing $vspec to $outputdir"
+    if ($version -match 'pythondaily') {
+        $ngArgs = "$ngArgs -FallbackSource https://www.myget.org/F/python/api/v3/index.json";
+    }
 
-            $ngArgs = "install -OutputDirectory `"$outputdir`" $nuGetAdditionalArgs";
+    if ($version -match '^(.+?)==(.+)$') {
+        $ngArgs = "$ngArgs $($Matches[1]) -Version $($Matches[2])";
+    } else {
+        $ngArgs = "$ngArgs $version";
+    }
 
-            if ($prerelease -ieq "true") {
-                $ngArgs = "$ngArgs -Prerelease";
-            }
+    # The only feasible way to get the install path is to check for changes
+    # to the install directory. Hopefully nobody else installs something
+    # simultaneously.
+    $before_install = (gci $outputdir -Directory -EA 0).Name;
+    Invoke-VstsTool $nuGetPath $ngArgs -RequireExitCodeZero
+    $after_install = (gci $outputdir -Directory -EA 0) | `
+        ?{ -not ($before_install -contains $_.Name) } | `
+        %{ Join-Path $_.FullName "tools" } | `
+        ?{ Test-Path (Join-Path $_ "python.exe") };
 
-            if ($nuGetSource) {
-                $ngArgs = "$ngArgs -Source $nuGetSource";
-            }
+    if (-not $after_install) {
+        Write-Error "Failed to install $version"
+        return
+    }
 
-            if ($vspec -match 'pythondaily') {
-                $ngArgs = "$ngArgs -FallbackSource https://www.myget.org/F/python/api/v3/index.json";
-            }
+    $last_path = $after_install | select -last 1;
+    if ($after_install.Count -gt 1) {
+        Write-Host "Multiple installs were detected - using $last_path"
+        Write-Verbose "Detected $after_install"
+    }
 
-            if ($vspec -match '^(.+?)==(.+)$') {
-                $ngArgs = "$ngArgs $($Matches[1]) -Version $($Matches[2])";
-            } else {
-                $ngArgs = "$ngArgs $vspec";
-            }
+    Set-VstsTaskVariable -Name pythonLocation -Value $last_path
+    $env:PATH = '{0};{1}' -f $last_path
+    Write-LoggingCommand -Area 'task' -Event 'prependpath' -Data $last_path
 
-            # The only feasible way to get the install path is to check for changes
-            # to the install directory. Hopefully nobody else
-            $before_install = (gci $outputdir -Directory -EA 0).Name;
-            Invoke-VstsTool $nuGetPath $ngArgs -RequireExitCodeZero
-            $after_install = (gci $outputdir -Directory -EA 0) | `
-                ?{ -not ($before_install -contains $_.Name) } | `
-                %{ Join-Path $_.FullName "tools" } | `
-                ?{ Test-Path (Join-Path $_ "python.exe") };
+    $script_path = Join-Path $last_path "Scripts"
+    if (Test-Path $script_path -PathType Container) {
+        $env:PATH = '{0};{1}' -f $script_path
+        Write-LoggingCommand -Area 'task' -Event 'prependpath' -Data $script_path
+    }
 
-            if (-not $after_install) {
-                Write-Error "Failed to install $vspec"
-                return
-            }
-
-            $last_path = $after_install | select -last 1;
-            if ($all_paths) {
-                $all_paths = "$all_paths;$($after_install -join ';')"
-            } else {
-                $all_paths = $after_install -join ';'
-            }
-
-            if ($dependencies) {
-                $after_install | %{
-                    Invoke-VstsTool (Join-Path $_ "python.exe") "-m pip install --upgrade $dependencies" $_
-                }
-            }
-        }
-        
-        Set-VstsTaskVariable -Name pythonLocation -Value $last_path
-        Set-VstsTaskVariable -Name allPythonLocations -Value $all_paths
-    } finally {
-        $env:NUGET_EXTENSIONS_PATH = $initialNugetExtensionsPath
+    if ($dependencies) {
+        Invoke-VstsTool (Join-Path $last_path "python.exe") "-m pip install --upgrade $dependencies" $last_path
     }
 } finally {
     Trace-VstsLeavingInvocation $MyInvocation
