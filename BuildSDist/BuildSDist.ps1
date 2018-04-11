@@ -3,9 +3,9 @@ try {
     . $PSScriptRoot\Get-PythonExe.ps1
 
     $setuppy = Get-VstsInput -Name "setuppy" -Default "setup.py"
-    $outputdir = Get-VstsInput -Name "outputdir" -Default "$($env:BUILD_BINARIESDIRECTORY)\dist"
+    $outputdir = Get-VstsInput -Name "outputdir" -Require
     $dependencies = Get-VstsInput -Name "dependencies"
-    $python = Get-PythonExe -Name "python"
+    $python = Get-PythonExe -Name "pythonpath"
     $workingdir = Get-VstsInput -Name "workingdir"
 
     if (-not $workingdir) {

@@ -5,25 +5,25 @@ try {
     $testroot = Get-VstsInput -Name "testroot"
     $patterns = (Get-VstsInput -Name "patterns" -Default "").Split()
     $testfilter = Get-VstsInput -Name "testfilter" -Default ""
-    $resultfile = Get-VstsInput -Name "resultfile" -Default "test-py%winver%.xml"
+    $resultfile = Get-VstsInput -Name "resultfile" -Require
     $resultprefix = Get-VstsInput -Name "resultprefix" -Default "py%winver%"
     $doctests = Get-VstsInput -Name "doctests" -AsBool
-    $python = Get-PythonExe -All -Name "python"
+    $python = Get-PythonExe -All -Name "pythonpath"
     $dependencies = Get-VstsInput -Name "dependencies"
     $clearcache = Get-VstsInput -Name "clearcache" -AsBool
-    $tempdir = Get-VstsInput -Name "tempdir" -Default "$env:BUILD_BINARIESDIRECTORY\test"
+    $tempdir = Get-VstsInput -Name "tempdir" -Require
     $abortOnFail = Get-VstsInput -Name "abortOnFail" -AsBool
-    $workingdir = Get-VstsInput -Name "workingdir" -Default $env:SYSTEM_DEFAULTWORKINGDIRECTORY
+    $workingdir = Get-VstsInput -Name "workingdir" -Require
 
     $args = "--color=no -q"
     if ($testfilter) {
-        $args = "$args -k `"$testfilter`""
+        $args = '{0} -k "{1}"' -f ($args, $testfilter)
     }
 
     pushd $workingdir
     try {
         if ($tempdir) {
-            $args = "$args --basetemp=`"$(mkdir $tempdir -Force)`""
+            $args = '{0} --basetemp="{1}"' -f ($args, (mkdir $tempdir -Force))
         }
 
         if ($resultfile) {
@@ -32,35 +32,36 @@ try {
             if ($rfparent) {
                 mkdir $rfparent -Force | Out-Null
             }
-            $args = "$args --junitxml=`"$resultfile`" --junitprefix=`"$resultprefix`""
+            $args = '{0} --junitxml="{1}" --junitprefix="{2}"' -f ($args, $resultfile, $resultprefix)
         }
 
         if ($testroot -and $patterns) {
             foreach ($f in Find-VstsMatch $testroot $patterns) {
-                $args = "$args `"$f`""
+                $args = '{0} "{1}"' -f ($args, $f)
             }
+        }
+
+        $env:winver = & $python -SEc "import sys;print(sys.winver)"
+
+        if ($dependencies) {
+            Invoke-VstsTool $python "-m pip install $dependencies" 
         }
 
         if ($testroot) {
             cd $testroot
         }
 
-        foreach($py in $python) {
-            $env:winver = & $py -SEc "import sys;print(sys.winver)"
-
-            if ($dependencies) {
-                Invoke-VstsTool $py "-m pip install $dependencies" 
-            }
-
-            try {
-                if ($abortOnFail) {
-                    Invoke-VstsTool $py "-m pytest $args" -RequireExitCodeZero
-                } else {
-                    Invoke-VstsTool $py "-m pytest $args"
+        try {
+            if ($abortOnFail) {
+                Invoke-VstsTool $python "-m pytest $args"
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Error "Test failures occurred. Ensure your Publish Test Results task is configured to always run, or you will not see any test results associated with this bulid."
                 }
-            } finally {
-                $env:winver = $null
+            } else {
+                Invoke-VstsTool $python "-m pytest $args"
             }
+        } finally {
+            $env:winver = $null
         }
     } finally {
         popd

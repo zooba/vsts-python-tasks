@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 4
+        "Patch": 5
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -43,12 +43,13 @@
             "name": "outputdir",
             "type": "string",
             "label": "Output Folder",
-            "defaultValue": "",
+            "defaultValue": "$(Build.ArtifactStagingDirectory)",
+            "required": true,
             "groupName": "packages",
-            "helpMarkDown": "Folder where the sdist will be written. By default, `$(Build.BinariesDirectory)\\dist` is used. The `BuildSDist.dist` output variable is set to this folder."
+            "helpMarkDown": "Folder where the sdist will be written. The `BuildSDist.dist` output variable is set to this folder."
         },
         {
-            "name": "python",
+            "name": "pythonpath",
             "type": "string",
             "label": "Python",
             "defaultValue": "",

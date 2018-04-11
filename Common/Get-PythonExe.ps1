@@ -1,7 +1,6 @@
 function Get-PythonExe {
     [CmdletBinding()]
-    param ([switch]$All,
-           [string]$Name="python",
+    param ([string]$Name="python",
            [string]$ExeName="python.exe",
            [string]$Default="")
 
@@ -10,17 +9,6 @@ function Get-PythonExe {
     try {
         $python = Get-VstsInput -Name $Name
 
-        if (-not $python) {
-            if ($All) {
-                $python = Get-VstsTaskVariable -Name "InstallPython.allPythonLocations"
-            } else {
-                $python = Get-VstsTaskVariable -Name "InstallPython.pythonLocation"
-                if (-not $python) {
-                    $python = Get-VstsTaskVariable -Name "UsePythonVersion.pythonLocation"
-                }
-            }
-        }
-
         if ($python) {
             return ($python -split ';') | %{
                 if (Test-Path $_ -PathType Leaf) {
@@ -28,7 +16,12 @@ function Get-PythonExe {
                 } elseif (Test-Path (Join-Path $_ $ExeName) -PathType Leaf) {
                     return Join-Path $_ $ExeName
                 }
-            } | select -Unique
+            } | select -First 1
+        }
+
+        $python = (Get-Command $ExeName -EA 0).Path
+        if ($python) {
+            return $python
         }
 
         if ($Default) {

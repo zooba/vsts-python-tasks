@@ -4,7 +4,7 @@ try {
 
     $packages = Get-VstsInput -Name "packages" -Default $env:BUILD_SOURCESDIRECTORY
     $outputdir = Get-VstsInput -Name "outputdir" -Default $env:BUILD_BINARIESDIRECTORY
-    $python = Get-PythonExe -Name "python"
+    $python = Get-PythonExe -Name "pythonpath"
     $dependencies = Get-VstsInput -Name "dependencies"
     $workingdir = Get-VstsInput -Name "workingdir" -Default $env:SYSTEM_DEFAULTWORKINGDIRECTORY
 
@@ -12,14 +12,12 @@ try {
         $packages = '"{0}"' -f $packages
     }
 
-    foreach ($py in $pythons) {
-        if ($dependencies) {
-            Invoke-VstsTool $py "-m pip install $dependencies" $workingdir
-        }
-
-        $arguments = '-m pip wheel -w "{0}" {1}' -f $outputdir, $packages
-        Invoke-VstsTool $py $arguments $workingdir -RequireExitCodeZero
+    if ($dependencies) {
+        Invoke-VstsTool $python "-m pip install $dependencies" $workingdir
     }
+
+    $arguments = '-m pip wheel -w "{0}" {1}' -f ($outputdir, $packages)
+    Invoke-VstsTool $python $arguments $workingdir -RequireExitCodeZero
 
     Set-VstsTaskVariable -Name dist -Value $outputdir
 } finally {

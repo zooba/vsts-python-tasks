@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 1
+        "Patch": 2
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -47,12 +47,12 @@
             "helpMarkDown": "Folder where wheels will written. By default, `$(Build.BinariesDirectory)\\dist` is used.  The `PipWheel.dist` output variable is set to this folder."
         },
         {
-            "name": "python",
+            "name": "pythonpath",
             "type": "string",
             "label": "Python",
             "defaultValue": "",
             "groupName": "advanced",
-            "helpMarkDown": "Directory or directories containing the `python.exe` to use. By default, the last install added by either the Install Python or Use Python task will be used."
+            "helpMarkDown": "Directory containing the `python.exe` to use. By default, the last install added by either the Install Python or Use Python task will be used."
         },
         {
             "name": "dependencies",

@@ -8,18 +8,20 @@ try {
 
     $nugetPath = (Get-Command 'nuget.exe' -EA 0).Source
     if (-not $nugetPath) {
-        $nugetPath = (gci "$env:AGENT_TOOLSDIRECTORY\nuget" -Directory) | `
-            sort -Descending | `
-            %{ Join-Path (Join-Path $_ 'x64'), (Join-Path $_ 'x86') 'nuget.exe' } | `
-            ?{ Test-Path $_ } | `
-            select -First 1
-        if (-not $nugetPath) {
-            Invoke-WebRequest https://aka.ms/nugetclidl -OutFile nuget.exe
-            $nugetPath = (Get-Command 'nuget.exe' -EA 0).Source
-            if (-not $nugetPath) {
-                throw "Unable to locate nuget.exe. Use the Nuget Tool Installer task to ensure it is available."
-            }
+        if (Test-Path "$env:AGENT_TOOLSDIRECTORY\nuget") {
+            $nugetPath = (gci "$env:AGENT_TOOLSDIRECTORY\nuget" -Directory) | `
+                sort -Descending | `
+                %{ Join-Path (Join-Path $_ 'x64'), (Join-Path $_ 'x86') 'nuget.exe' } | `
+                ?{ Test-Path $_ } | `
+                select -First 1
         }
+    }
+    if (-not $nugetPath) {
+        Invoke-WebRequest https://aka.ms/nugetclidl -OutFile nuget.exe
+        $nugetPath = (Get-Command 'nuget.exe' -EA 0).Source
+    }
+    if (-not $nugetPath) {
+        throw "Unable to locate nuget.exe. Use the Nuget Tool Installer task to ensure it is available."
     }
 
     if ($env:NUGET_EXTENSIONS_PATH) {

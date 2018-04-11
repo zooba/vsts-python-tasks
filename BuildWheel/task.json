@@ -2,7 +2,7 @@
     "id": "1D59D2E4-DD7D-4172-9A13-E519CF2AFCAC",
     "name": "BuildWheel",
     "friendlyName": "Build Python wheels",
-    "description": "Creates wheels using all installed copies of Python.",
+    "description": "Creates a wheel using an installed copy of Python.",
     "helpMarkDown": "The *Build Python wheels* task uses a `setup.py` file to compile wheels. It will ensure that `pip`, `wheel`, `setuptools` and `cython` are installed before running.",
     "category": "Build",
     "visibility": [
@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 5
+        "Patch": 6
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -41,11 +41,11 @@
         },
         {
             "name": "outputdir",
-            "type": "string",
+            "type": "filePath",
             "label": "Output Folder",
-            "defaultValue": "",
+            "defaultValue": "$(Build.ArtifactStagingDirectory)",
             "groupName": "packages",
-            "helpMarkDown": "Folder where wheels will be written. By default, `$(Build.BinariesDirectory)\\dist` is used. The `BuildWheel.dist` output variable is set to this folder."
+            "helpMarkDown": "Folder where wheel will be written. The `BuildWheel.dist` output variable is set to this folder."
         },
         {
             "name": "universal",
@@ -53,7 +53,7 @@
             "label": "Create a Universal wheel",
             "defaultValue": false,
             "groupName": "packages",
-            "helpMarkDown": "Marks the wheel as universal. Only the last found copy of Python will be used to build the wheel."
+            "helpMarkDown": "Marks the wheel as universal."
         },
         {
             "name": "dependencies",
@@ -80,20 +80,20 @@
             "helpMarkDown": "Optional command to execute between `build` and `bdist_wheel`."
         },
         {
-            "name": "python",
+            "name": "pythonpath",
             "type": "string",
             "label": "Python",
             "defaultValue": "",
             "groupName": "advanced",
-            "helpMarkDown": "Directory containing the `python.exe` to use. By default, all installs added by either the Install Python or Use Python task will be used."
+            "helpMarkDown": "Directory containing the `python.exe` to use. By default, the last install added by either the Install Python or Use Python task will be used."
         },
         {
             "name": "builddir",
-            "type": "string",
+            "type": "filePath",
             "label": "Build Folder",
-            "defaultValue": "",
+            "defaultValue": "$(Build.BinariesDirectory)",
             "groupName": "advanced",
-            "helpMarkDown": "Base directory for temporary build artifacts. By default, `$(Build.BinariesDirectory)` is used."
+            "helpMarkDown": "Base directory for temporary build artifacts."
         },
         {
             "name": "workingdir",

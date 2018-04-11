@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 3
+        "Patch": 4
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -38,9 +38,9 @@
         {
             "name": "version",
             "type": "pickList",
-            "label": "Version pack",
+            "label": "Python Version",
             "defaultValue": "python",
-            "helpMarkDown": "Select a set of versions to install.",
+            "helpMarkDown": "Select a version to install, or enter a package constraint (such as `python2==2.7.12` or `pythonx86==3.6`).",
             "required" : true,
             "groupName": "version",
             "options": {
@@ -48,7 +48,8 @@
                 "pythonx86": "Latest 3.x (32-bit)",
                 "python2": "Latest 2.x (64-bit)",
                 "python2x86": "Latest 2.x (32-bit)",
-                "pythondaily": "Latest daily build (64-bit only)"
+                "pythondaily": "Latest daily build (64-bit only)",
+                "$(PythonVersion)": "Use $(PythonVersion) variable"
             },
             "properties": {
                 "EditableOptions": "True"
@@ -60,7 +61,7 @@
             "label": "Install prerelease versions",
             "defaultValue": false,
             "groupName": "version",
-            "helpMarkDown": "Allow prerelease versions of Python to be installed. (Not required to get daily builds.)"
+            "helpMarkDown": "Allow prerelease versions of Python to be installed. (Not required for daily builds.)"
         },
         {
             "name": "dependencies",

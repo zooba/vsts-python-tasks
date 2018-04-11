@@ -3,7 +3,7 @@
     "name": "PythonScript",
     "friendlyName": "Run Python script",
     "description": "Runs a script with one or more interpreters.",
-    "helpMarkDown": "The *Run Python script* task will let you enter any script or command to run with the copies of Python installed by the Install Python task.\n\nYou can choose whether to run the script once for each installed Python or only once (with the latest version available).",
+    "helpMarkDown": "The *Run Python script* task will let you enter any script or command to run with Python.",
     "category": "Build",
     "visibility": [
         "Build",
@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 3
+        "Patch": 4
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -55,14 +55,6 @@
             "helpMarkDown": "Folder where Python will be run."
         },
         {
-            "name": "onlyone",
-            "type": "boolean",
-            "label": "Only run once",
-            "defaultValue": true,
-            "groupName": "script",
-            "helpMarkDown": "When checked, only the latest Python version is used to execute the script. Otherwise, all discovered Python versions are used."
-        },
-        {
             "name": "abortOnFail",
             "type": "boolean",
             "label": "Fail on non-zero exit code",
@@ -71,12 +63,12 @@
             "helpMarkDown": "Aborts the build by failing this task if the script returns a non-zero exit code."
         },
         {
-            "name": "python",
+            "name": "pythonpath",
             "type": "string",
             "label": "Python",
             "defaultValue": "",
             "groupName": "advanced",
-            "helpMarkDown": "Directory or directories containing the `python.exe` to use. By default, the last install added by either the Install Python or Use Python task will be used."
+            "helpMarkDown": "Directory containing the `python.exe` to use. By default, the last install added by either the Install Python or Use Python task will be used."
         },
         {
             "name": "dependencies",
