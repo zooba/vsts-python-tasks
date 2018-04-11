@@ -68,7 +68,7 @@ try {
     }
 
     Set-VstsTaskVariable -Name pythonLocation -Value $last_path
-    $env:PATH = '{0};{1}' -f $last_path
+    $env:PATH = '{0};{1}' -f ($env:PATH, $last_path)
     Write-LoggingCommand -Area 'task' -Event 'prependpath' -Data $last_path
 
     $script_path = Join-Path $last_path "Scripts"
