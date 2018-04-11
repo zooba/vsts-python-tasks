@@ -73,7 +73,7 @@ try {
 
     $script_path = Join-Path $last_path "Scripts"
     if (Test-Path $script_path -PathType Container) {
-        $env:PATH = '{0};{1}' -f $script_path
+        $env:PATH = '{0};{1}' -f ($env:PATH, $script_path)
         Write-LoggingCommand -Area 'task' -Event 'prependpath' -Data $script_path
     }
 
