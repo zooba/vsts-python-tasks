@@ -57,6 +57,18 @@ try {
         ?{ Test-Path (Join-Path $_ "python.exe") };
 
     if (-not $after_install) {
+        if ($version -match '^(.+?)==(.+)$') {
+            $p = "$($Matches[1]).$($Matches[2])";
+        } else {
+            $p = "${version}."
+        }
+        $after_install = (gci $outputdir -Directory -EA 0) | `
+            ?{ $_.Name.StartsWith($p) } | `
+            %{ Join-Path $_.FullName "tools" } | `
+            ?{ Test-Path (Join-Path $_ "python.exe") } | `
+            select -last 1;
+    }
+    if (-not $after_install) {
         Write-Error "Failed to install $version"
         return
     }
@@ -72,10 +84,8 @@ try {
     Write-Host "##vso[task.prependpath]$last_path"
 
     $script_path = Join-Path $last_path "Scripts"
-    if (Test-Path $script_path -PathType Container) {
-        $env:PATH = '{0};{1}' -f ($env:PATH, $script_path)
-        Write-Host "##vso[task.prependpath]$script_path"
-    }
+    $env:PATH = '{0};{1}' -f ($env:PATH, $script_path)
+    Write-Host "##vso[task.prependpath]$script_path"
 
     if ($dependencies) {
         Invoke-VstsTool (Join-Path $last_path "python.exe") "-m pip install --upgrade $dependencies" $last_path
