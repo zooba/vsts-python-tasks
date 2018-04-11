@@ -69,12 +69,12 @@ try {
 
     Set-VstsTaskVariable -Name pythonLocation -Value $last_path
     $env:PATH = '{0};{1}' -f ($env:PATH, $last_path)
-    Write-VstsLoggingCommand -Area 'task' -Event 'prependpath' -Data $last_path
+    Write-Host "##vso[task.prependpath]$last_path"
 
     $script_path = Join-Path $last_path "Scripts"
     if (Test-Path $script_path -PathType Container) {
         $env:PATH = '{0};{1}' -f ($env:PATH, $script_path)
-        Write-VstsLoggingCommand -Area 'task' -Event 'prependpath' -Data $script_path
+        Write-Host "##vso[task.prependpath]$script_path"
     }
 
     if ($dependencies) {
