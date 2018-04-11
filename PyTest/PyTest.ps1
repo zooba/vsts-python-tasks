@@ -8,7 +8,7 @@ try {
     $resultfile = Get-VstsInput -Name "resultfile" -Require
     $resultprefix = Get-VstsInput -Name "resultprefix" -Default "py%winver%"
     $doctests = Get-VstsInput -Name "doctests" -AsBool
-    $python = Get-PythonExe -All -Name "pythonpath"
+    $python = Get-PythonExe -Name "pythonpath"
     $dependencies = Get-VstsInput -Name "dependencies"
     $clearcache = Get-VstsInput -Name "clearcache" -AsBool
     $tempdir = Get-VstsInput -Name "tempdir" -Require
