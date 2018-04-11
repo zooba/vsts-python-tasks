@@ -18,7 +18,7 @@ try {
     }
     if (-not $nugetPath) {
         Invoke-WebRequest https://aka.ms/nugetclidl -OutFile nuget.exe
-        $nugetPath = (Get-Command 'nuget.exe' -EA 0).Source
+        $nugetPath = (Get-Command '.\nuget.exe' -EA 0).Source
     }
     if (-not $nugetPath) {
         throw "Unable to locate nuget.exe. Use the Nuget Tool Installer task to ensure it is available."
