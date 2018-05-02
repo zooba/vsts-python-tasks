@@ -1,16 +1,20 @@
 Adds tasks to simplify using Python in Visual Studio Team Services build definitions.
 
+Note that these tasks only work on Windows build agents. For non-Windows platforms, add the *Use Python Version* task to select the version you need and configure your command `PATH`.
+
 # Install Python
 
-The *Install Python* task will install one or more copies of Python using packages from [nuget.org](https://nuget.org). These packages are part of the official release of CPython.
+The *Install Python* task will install Python using a package from [nuget.org](https://nuget.org) and add it to `PATH`. These packages are part of the official release of CPython.
 
-Most other tasks assume you have already run this task to install the desired runtimes. The folder where they are installed is customizable, but be aware that you will need to update subsequent task configuration if you change this.
+Most other tasks assume you have already run this task to install the desired runtime. The folder where they are installed is customizable, but be aware that you may need to update subsequent task configuration if you change this.
+
+The recommended configuration for using this task with multiple versions of Python is to enable multi-configuration on the phase and specify the version number as a Multiplier. See [the documentation](https://go.microsoft.com/fwlink/?linkid=835763) for information about parallel execution.
+
+(Note that the first-party *Use Python Version* task is preferable on the Hosted queues and works on all platforms, though as of 02 May 2018 is not fully available.)
 
 # Run Python script
 
-The *Run Python script* task will let you enter any script or command to run with the copies of Python installed by the Install Python task.
-
-You can choose whether to run the script once for each installed Python or only once (with the latest version available).
+The *Run Python script* task will let you enter any script or command to run with Python.
 
 # Run Python tests
 
@@ -34,7 +38,7 @@ The *Build Python sdist* task uses a `setup.py` file to produce a source distrib
 
 The *Upload Python package* task uses `twine` to upload your built packages to the [Python Package Index](https://pypi.org). You may also select to upload to the test instance.
 
-Your username and password are required. It is recommended to add these as encrypted build variables rather than adding them directly to the task.
+Your username and password are required. It is recommended to add these as [encrypted build variables](https://docs.microsoft.com/en-us/vsts/build-release/concepts/definitions/build/variables?view=vsts&tabs=batch#secret-variables) or a [secured configuration file](https://docs.microsoft.com/en-us/vsts/build-release/tasks/utility/download-secure-file?view=vsts) rather than adding them directly to the task.
 
 # Update version variables
 

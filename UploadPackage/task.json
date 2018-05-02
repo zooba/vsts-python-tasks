@@ -3,7 +3,7 @@
     "name": "UploadPackage",
     "friendlyName": "Upload Python package",
     "description": "Uploads built packages to PyPI.",
-    "helpMarkDown": "The *Upload Python package* task uses `twine` to upload your built packages to the [Python Package Index](https://pypi.org). You may also select to upload to the test instance.\n\nYour username and password are required. It is recommended to add these as encrypted build variables or a secured configuration file rather than adding them directly to the task.",
+    "helpMarkDown": "The *Upload Python package* task uses `twine` to upload your built packages to the [Python Package Index](https://pypi.org). You may also select to upload to the test instance.\n\nYour username and password are required. It is recommended to add these as [encrypted build variables](https://docs.microsoft.com/en-us/vsts/build-release/concepts/definitions/build/variables?view=vsts&tabs=batch#secret-variables) or a [secured configuration file](https://docs.microsoft.com/en-us/vsts/build-release/tasks/utility/download-secure-file?view=vsts) rather than adding them directly to the task.",
     "category": "Package",
     "visibility": [
         "Build",
@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 8
+        "Patch": 9
     },
     "minimumAgentVersion": "2.0",
     "groups": [

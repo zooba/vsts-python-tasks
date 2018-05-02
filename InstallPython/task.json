@@ -1,9 +1,9 @@
 {
     "id": "6095FBBE-853D-4F2E-BC15-A88C92A78B4D",
     "name": "InstallPython",
-    "friendlyName": "Install Python",
+    "friendlyName": "Install Python on Windows",
     "description": "Installs one or more Python versions into your build environment",
-    "helpMarkDown": "The *Install Python* task will install a of Python using packages from [nuget.org](https://nuget.org) and add them to `PATH`. These packages are part of the official release of CPython.\n\nMost other tasks assume you have already run this task to install the desired runtimes. The folder where they are installed is customizable, but be aware that you will need to update subsequent task configuration if you change this.",
+    "helpMarkDown": "The *Install Python* task will install Python using a package from [nuget.org](https://nuget.org) and add it to `PATH`. These packages are part of the official release of CPython.\n\nMost other tasks assume you have already run this task to install the desired runtime. The folder where they are installed is customizable, but be aware that you may need to update subsequent task configuration if you change this.\n\nThe recommended configuration for using this task with multiple versions of Python is to enable multi-configuration on the phase and specify the version number as a Multiplier. See [the documentation](https://go.microsoft.com/fwlink/?linkid=835763) for information about parallel execution.\n\n(Note that the first-party *Use Python Version* task is preferable on the Hosted queues and works on all platforms, though as of 02 May 2018 is not fully available.)",
     "category": "Utility",
     "visibility": [
         "Build",
@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 10
+        "Patch": 11
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -92,7 +92,7 @@
     "outputVariables": [
         {
             "name": "pythonLocation",
-            "description": "The directory of the latest installed Python distribution. Use this in subsequent tasks to access this installation of Python"
+            "description": "The directory of the Python installation. Use this in subsequent tasks to access this copy of Python"
         }
     ],
     "execution": {
