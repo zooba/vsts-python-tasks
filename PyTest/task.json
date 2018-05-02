@@ -2,8 +2,8 @@
     "id": "D1BC1D2E-DE24-4CAD-90C6-59F8704CE090",
     "name": "PyTest",
     "friendlyName": "Run Python tests",
-    "description": "Runs tests using PyTest in all available installs of Python.",
-    "helpMarkDown": "[More Information](https://aka.ms/python)",
+    "description": "Runs tests using PyTest.",
+    "helpMarkDown": "The *Run Python tests* task will install and use [PyTest](https://pytest.org) to run your test suite. You should add a \"Publish Test Results\" task after this in order to see your test status in the build results page.",
     "category": "Test",
     "visibility": [
         "Build",
@@ -11,9 +11,9 @@
     ],
     "author": "Steve Dower",
     "version": {
-        "Major": 0,
-        "Minor": 4,
-        "Patch": 0
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 3
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -34,7 +34,7 @@
             "name": "testroot",
             "type": "filePath",
             "label": "Root directory",
-            "required": false,
+            "required": true,
             "groupName": "tests",
             "helpMarkDown": "Root directory to run tests from."
         },
@@ -58,7 +58,7 @@
             "name": "resultfile",
             "type": "filePath",
             "label": "Results File",
-            "defaultValue": "test-py%winver%.xml",
+            "defaultValue": "$(Build.BinariesDirectory)\\test\\test-py%winver%.xml",
             "groupName": "tests",
             "helpMarkDown": "Location to store test results in JUnit format. Add a \"Publish Test Results\" task to associate these results with your build."
         },
@@ -79,20 +79,28 @@
             "helpMarkDown": "Select to also execute all doctests discovered in test files."
         },
         {
-            "name": "python",
-            "type": "filePath",
-            "label": "Python",
-            "defaultValue": "$(Build.BinariesDirectory)\\python.exe",
-            "groupName": "advanced",
-            "helpMarkDown": "Search path for installed Python versions."
-        },
-        {
             "name": "dependencies",
             "type": "string",
             "label": "Dependencies",
             "defaultValue": "pytest",
-            "groupName": "advanced",
+            "groupName": "tests",
             "helpMarkDown": "Packages to install prior to running tests. Prefix with `--upgrade` to ensure you have the latest version."
+        },
+        {
+            "name": "pythonpath",
+            "type": "string",
+            "label": "Python",
+            "defaultValue": "",
+            "groupName": "advanced",
+            "helpMarkDown": "Directory containing the `python.exe` to use. By default, the last install added by either the Install Python or Use Python task will be used."
+        },
+        {
+            "name": "workingdir",
+            "type": "filePath",
+            "label": "Working Folder",
+            "defaultValue": "",
+            "groupName": "advanced",
+            "helpMarkDown": "Working directory for running the build. By default, the root source directory will be used."
         },
         {
             "name": "clearcache",
@@ -108,7 +116,7 @@
             "label": "Temp directory",
             "defaultValue": "$(Build.BinariesDirectory)\\test",
             "groupName": "advanced",
-            "helpMarkDown": "Base temporary directory."
+            "helpMarkDown": "Base temporary directory. Each Python version creates its own subdirectory."
         },
         {
             "name": "abortOnFail",
@@ -116,7 +124,7 @@
             "label": "Abort on failed test result",
             "defaultValue": false,
             "groupName": "advanced",
-            "helpMarkDown": "Abort the build if any tests fail"
+            "helpMarkDown": "Abort the build if any tests fail. **NOTE:** You will need to set any subsequent Publish Test Result task to always run, or you will not see your test results."
         }
     ],
     "execution": {

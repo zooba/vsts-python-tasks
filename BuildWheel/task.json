@@ -2,8 +2,8 @@
     "id": "1D59D2E4-DD7D-4172-9A13-E519CF2AFCAC",
     "name": "BuildWheel",
     "friendlyName": "Build Python wheels",
-    "description": "Creates wheels using all installed copies of Python.",
-    "helpMarkDown": "[More Information](https://aka.ms/python)",
+    "description": "Creates a wheel using an installed copy of Python.",
+    "helpMarkDown": "The *Build Python wheels* task uses a `setup.py` file to compile wheels. It will ensure that `pip`, `wheel`, `setuptools` and `cython` are installed before running.",
     "category": "Build",
     "visibility": [
         "Build",
@@ -11,9 +11,9 @@
     ],
     "author": "Steve Dower",
     "version": {
-        "Major": 0,
-        "Minor": 4,
-        "Patch": 0
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 6
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -43,9 +43,9 @@
             "name": "outputdir",
             "type": "filePath",
             "label": "Output Folder",
-            "defaultValue": "$(Build.BinariesDirectory)\\dist",
+            "defaultValue": "$(Build.ArtifactStagingDirectory)",
             "groupName": "packages",
-            "helpMarkDown": "Folder where wheels will be written. By default, `$(Build.BinariesDirectory)\\dist` is used."
+            "helpMarkDown": "Folder where wheel will be written. The `BuildWheel.dist` output variable is set to this folder."
         },
         {
             "name": "universal",
@@ -53,7 +53,23 @@
             "label": "Create a Universal wheel",
             "defaultValue": false,
             "groupName": "packages",
-            "helpMarkDown": "Marks the wheel as universal. Only the last found copy of Python will be used to build the wheel."
+            "helpMarkDown": "Marks the wheel as universal."
+        },
+        {
+            "name": "dependencies",
+            "type": "string",
+            "label": "Dependencies",
+            "defaultValue": "pip setuptools wheel cython",
+            "groupName": "packages",
+            "helpMarkDown": "Packages to install prior to building wheels. Prefix with `--upgrade` to ensure you have the latest version."
+        },
+        {
+            "name": "usemsbuild",
+            "type": "boolean",
+            "label": "Use MSBuild for building extensions",
+            "defaultValue": false,
+            "groupName": "packages",
+            "helpMarkDown": "Adds the [`pyfindvs`](https://pypi.org/p/pyfindvs) package and uses it to locate and build with MSBuild instead of the built-in module. Recommended for Python 3.5 and later."
         },
         {
             "name": "signcmd",
@@ -64,28 +80,34 @@
             "helpMarkDown": "Optional command to execute between `build` and `bdist_wheel`."
         },
         {
-            "name": "python",
-            "type": "filePath",
+            "name": "pythonpath",
+            "type": "string",
             "label": "Python",
-            "defaultValue": "$(Build.BinariesDirectory)\\python.exe",
+            "defaultValue": "",
             "groupName": "advanced",
-            "helpMarkDown": "Search path for installed Python versions. This will be passed to Get-ChildItem and all matches will be used to build, unless building a universal wheel."
+            "helpMarkDown": "Directory containing the `python.exe` to use. By default, the last install added by either the Install Python or Use Python task will be used."
         },
         {
-            "name": "dependencies",
-            "type": "string",
-            "label": "Dependencies",
-            "defaultValue": "pip setuptools wheel cython",
+            "name": "builddir",
+            "type": "filePath",
+            "label": "Build Folder",
+            "defaultValue": "$(Build.BinariesDirectory)",
             "groupName": "advanced",
-            "helpMarkDown": "Packages to install prior to building wheels. Prefix with `--upgrade` to ensure you have the latest version."
+            "helpMarkDown": "Base directory for temporary build artifacts."
         },
         {
             "name": "workingdir",
-            "type": "filePath",
+            "type": "string",
             "label": "Working Folder",
-            "defaultValue": "$(Build.BinariesDirectory)",
-            "groupName": "packages",
-            "helpMarkDown": "Folder where wheels will be written. By default, `$(Build.BinariesDirectory)` is used."
+            "defaultValue": "",
+            "groupName": "advanced",
+            "helpMarkDown": "Working directory for running the build. By default, the directory containing setup.py will be used."
+        }
+    ],
+    "outputVariables": [
+        {
+            "name": "dist",
+            "description": "The directory distribution files were written to."
         }
     ],
     "execution": {

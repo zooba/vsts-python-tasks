@@ -1,9 +1,9 @@
 {
     "id": "EB33011F-0C71-47D4-83C3-359D5D40925F",
     "name": "UploadPackage",
-    "friendlyName": "Upload Python package (Experimental)",
+    "friendlyName": "Upload Python package",
     "description": "Uploads built packages to PyPI.",
-    "helpMarkDown": "[More Information](https://aka.ms/python)",
+    "helpMarkDown": "The *Upload Python package* task uses `twine` to upload your built packages to the [Python Package Index](https://pypi.org). You may also select to upload to the test instance.\n\nYour username and password are required. It is recommended to add these as [encrypted build variables](https://docs.microsoft.com/en-us/vsts/build-release/concepts/definitions/build/variables?view=vsts&tabs=batch#secret-variables) or a [secured configuration file](https://docs.microsoft.com/en-us/vsts/build-release/tasks/utility/download-secure-file?view=vsts) rather than adding them directly to the task.",
     "category": "Package",
     "visibility": [
         "Build",
@@ -11,9 +11,9 @@
     ],
     "author": "Steve Dower",
     "version": {
-        "Major": 0,
-        "Minor": 3,
-        "Patch": 0
+        "Major": 1,
+        "Minor": 0,
+        "Patch": 9
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -38,11 +38,11 @@
         {
             "name": "distdir",
             "type": "filePath",
-            "label": "Packages",
-            "defaultValue": "$(Build.BinariesDirectory)\\dist\\*",
+            "label": "Path to publish",
+            "defaultValue": "$(Build.ArtifactStagingDirectory)",
             "required": true,
             "groupName": "package",
-            "helpMarkDown": "Location of your distribution files. Should be a single file or wildcard."
+            "helpMarkDown": "The folder or file path to publish."
         },
         {
             "name": "repository",
@@ -64,7 +64,7 @@
             "name": "username",
             "type": "string",
             "label": "Username",
-            "required": true,
+            "defaultValue": "",
             "groupName": "repository",
             "helpMarkDown": "The username to use for authenticating with the index server"
         },
@@ -72,24 +72,31 @@
             "name": "password",
             "type": "string",
             "label": "Password",
-            "required": true,
+            "defaultValue": "",
             "groupName": "repository",
             "helpMarkDown": "The password to use for authenticating with the index server. To encrypt this value, use a build variable with its lock enabled."
         },
         {
-            "name": "python",
+            "name": "pypirc",
             "type": "filePath",
+            "label": "PyPI Config",
+            "defaultValue": "",
+            "groupName": "repository",
+            "helpMarkDown": "The `.pypirc` file to use for publishing. If this file contains credentials, we recommend using the \"Download Secure File\" task."
+        },
+        {
+            "name": "pythonpath",
+            "type": "string",
             "label": "Python",
-            "defaultValue": "$(Build.BinariesDirectory)\\python.exe",
-            "required": true,
+            "defaultValue": "",
             "groupName": "advanced",
-            "helpMarkDown": "Search path for installed Python versions. This will be passed to Get-ChildItem and the last match will be used to upload."
+            "helpMarkDown": "Directory containing the `python.exe` to use. By default, the last install added by either the Install Python or Use Python task will be used."
         },
         {
             "name": "dependencies",
             "type": "string",
             "label": "Dependencies",
-            "defaultValue": "twine",
+            "defaultValue": "--upgrade twine",
             "groupName": "advanced",
             "helpMarkDown": "Packages to install prior to uploading packages. Prefix with `--upgrade` to ensure you have the latest version."
         },
@@ -97,9 +104,9 @@
             "name": "skipexisting",
             "type": "boolean",
             "label": "Continue uploading when a file exists",
-            "defaultValue": "true",
+            "defaultValue": true,
             "groupName": "advanced",
-            "helpMarkDown": "When unchecked, existing files will abort uploading. Files cannot be overwritten on PyPI."
+            "helpMarkDown": "When unchecked, existing files will abort uploading. Files cannot be overwritten on PyPI, and attempting to reupload a file will cause the entire build to fail."
         },
         {
             "name": "otherargs",

@@ -1,27 +1,44 @@
-$setuppy = Get-VstsInput -Name "setuppy" -Default "setup.py"
-$outputdir = Get-VstsInput -Name "outputdir" -Default "$($env:BUILD_BINARIESDIRECTORY)\dist"
-$signcmd = Get-VstsInput -Name "signcmd" -Default ""
-$universal = Get-VstsInput -Name "universal" -Require -AsBool
-$python = Get-VstsInput -Name "python" -Require
-$dependencies = Get-VstsInput -Name "dependencies"
-$workingdir = Get-VstsInput -Name "workingdir" -Default "${env:BUILD_BINARIESDIRECTORY}"
+Trace-VstsEnteringInvocation $MyInvocation
+try {
+    . $PSScriptRoot\Get-PythonExe.ps1
 
-$pythons = gci $python -Recurse
+    $setuppy = Get-VstsInput -Name "setuppy" -Default "setup.py"
+    $builddir = Get-VstsInput -Name "builddir" -Require
+    $outputdir = Get-VstsInput -Name "outputdir" -Require
+    $signcmd = Get-VstsInput -Name "signcmd" -Default ""
+    $universal = Get-VstsInput -Name "universal" -Require -AsBool
+    $dependencies = Get-VstsInput -Name "dependencies"
+    $workingdir = Get-VstsInput -Name "workingdir"
+    $usemsbuild = Get-VstsInput -Name "usemsbuild" -Require -AsBool
+    $python = Get-PythonExe -Name "pythonpath"
 
-if ($universal) {
-    $pythons = @($pythons | select -Last 1)
-    $universalcmd = "--universal"
-} else {
-    $universalcmd = ""
-}
-
-if ($dependencies) {
-    foreach ($py in $pythons) {
-        Invoke-VstsTool $py "-m pip install $dependencies"
+    if (-not $workingdir) {
+        $workingdir = (Resolve-Path $setuppy | Split-Path)
     }
-}
 
-foreach ($py in $pythons) {
-    $arguments = "`"$setuppy`" build --build-base `"$workingdir`" $signcmd bdist_wheel -d `"$outputdir`" $universalcmd"
-    Invoke-VstsTool $py $arguments (Resolve-Path $setuppy | Split-Path) -RequireExitCodeZero
+    if ($dependencies) {
+        Invoke-VstsTool $python "-m pip install $dependencies" $workingdir
+    }
+    if ($usemsbuild -and -not ($dependencies -match '\bpyfindvs\b')) {
+        Invoke-VstsTool $python "-m pip install pyfindvs" $workingdir
+    }
+
+    $arguments = '"{0}"' -f $setuppy
+    if ($usemsbuild) {
+        $arguments = "$arguments enable_msbuildcompiler"
+    }
+    $arguments = '{0} build --build-base "{1}"' -f ($arguments, $builddir)
+    if ($signcmd) {
+        $arguments = "$arguments $signcmd"
+    }
+    $arguments = '{0} bdist_wheel -d "{1}"' -f ($arguments, $outputdir)
+    if ($universal) {
+        $arguments = "$arguments --universal"
+    }
+
+    Invoke-VstsTool $python $arguments $workingdir -RequireExitCodeZero
+
+    Set-VstsTaskVariable -Name dist -Value $outputdir
+} finally {
+    Trace-VstsLeavingInvocation $MyInvocation
 }

@@ -3,7 +3,7 @@
     "name": "CondaCreate",
     "friendlyName": "Create Conda Environment (Experimental)",
     "description": "Creates an environment using conda.",
-    "helpMarkDown": "[More Information](https://aka.ms/python)",
+    "helpMarkDown": "The experimental *Create Conda Environment* task will create an environment and install packages using [conda](https://conda.io).\n\nYou must provide a list of packages to install that includes Python itself, for example: `python=3.6 numpy jupyter`.",
     "category": "Utility",
     "visibility": [
         "Build",
