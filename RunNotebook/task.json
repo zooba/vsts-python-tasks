@@ -13,7 +13,7 @@
     "version": {
         "Major": 0,
         "Minor": 1,
-        "Patch": 3
+        "Patch": 4
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -53,6 +53,13 @@
             "defaultValue": "$(Build.BinariesDirectory)\\env\\Scripts\\jupyter.exe",
             "groupName": "advanced",
             "helpMarkDown": "Location of an installed `jupyter.exe` that also includes `nbconvert`."
+        },
+        {
+            "name": "arguments",
+            "type": "string",
+            "label": "Extra Arguments",
+            "groupName": "advanced",
+            "helpMarkDown": "Additional arguments to pass to `nbconvert`."
         }
     ],
     "execution": {
