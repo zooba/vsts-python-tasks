@@ -8,7 +8,7 @@ try {
     $dependencies = Get-VstsInput -Name "dependencies"
     $workingdir = Get-VstsInput -Name "workingdir" -Default $env:SYSTEM_DEFAULTWORKINGDIRECTORY
 
-    if (-not ($packages -match '^".+"$') -and Test-Path $packages) {
+    if (-not ($packages -match '^".+"$') -and (Test-Path $packages)) {
         $packages = '"{0}"' -f $packages
     }
 
