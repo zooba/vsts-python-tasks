@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 11
+        "Patch": 12
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -40,7 +40,7 @@
             "type": "pickList",
             "label": "Python Version",
             "defaultValue": "python",
-            "helpMarkDown": "Select a version to install, or enter a package constraint (such as `python2==2.7.12` or `pythonx86==3.6`).",
+            "helpMarkDown": "Select a version to install, or enter a package constraint such as `python2==2.7.12`, `pythonx86==3.6` or `python==3.7.0-rc1`. To run multiple builds, use `PythonVersion` as a multiplier and provide multiple package constraints.",
             "required" : true,
             "groupName": "version",
             "options": {
@@ -69,7 +69,7 @@
             "label": "Dependencies",
             "defaultValue": "",
             "groupName": "packages",
-            "helpMarkDown": "Packages to install or upgrade immediately after installing Python. Packages are always upgraded."
+            "helpMarkDown": "Packages to install or upgrade immediately after installing Python. Packages are always upgraded. Specify `-r requirements.txt` to install from a requirements file."
         },
         {
             "name": "outputdir",
