@@ -9,6 +9,7 @@ try {
     $resultprefix = Get-VstsInput -Name "resultprefix" -Default "py%winver%"
     $doctests = Get-VstsInput -Name "doctests" -AsBool
     $codecoverage = Get-VstsInput -Name "codecoverage" -AsBool
+    $pylint = Get-VstsInput -Name "pylint" -AsBool
     $python = Get-PythonExe -Name "pythonpath"
     $dependencies = Get-VstsInput -Name "dependencies"
     $clearcache = Get-VstsInput -Name "clearcache" -AsBool
@@ -39,6 +40,11 @@ try {
         if ($codecoverage) {
             $args = '{0} --cov=com --cov-report=xml --cov-report=html' -f ($args)
             $dependencies '{0} pytest-cov' -f ($dependencies)
+        }
+        
+        if ($pylint) {
+            $args = '{0} --pylint' -f ($args)
+            $dependencies '{0} pytest-pylint' -f ($dependencies)
         }
 
         if ($testroot -and $patterns) {
