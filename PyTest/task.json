@@ -87,6 +87,14 @@
             "helpMarkDown": "Select to enable code coverage report writing."
         },
         {
+            "name": "pylint",
+            "type": "boolean",
+            "label": "Enable pylint reports",
+            "defaultValue": false,
+            "groupName": "tests",
+            "helpMarkDown": "Select to enable pylint report writing."
+        },
+        {
             "name": "dependencies",
             "type": "string",
             "label": "Dependencies",
