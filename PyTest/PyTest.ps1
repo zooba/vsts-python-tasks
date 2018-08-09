@@ -39,12 +39,12 @@ try {
         
         if ($codecoverage) {
             $args = '{0} --cov=com --cov-report=xml --cov-report=html' -f ($args)
-            $dependencies '{0} pytest-cov' -f ($dependencies)
+            $dependencies = '{0} pytest-cov' -f ($dependencies)
         }
         
         if ($pylint) {
             $args = '{0} --pylint' -f ($args)
-            $dependencies '{0} pytest-pylint' -f ($dependencies)
+            $dependencies = '{0} pytest-pylint' -f ($dependencies)
         }
 
         if ($testroot -and $patterns) {
