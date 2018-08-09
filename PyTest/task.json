@@ -79,6 +79,22 @@
             "helpMarkDown": "Select to also execute all doctests discovered in test files."
         },
         {
+            "name": "codecoverage",
+            "type": "boolean",
+            "label": "Enable code coverage reports",
+            "defaultValue": true,
+            "groupName": "tests",
+            "helpMarkDown": "Select to enable code coverage report writing."
+        },
+        {
+            "name": "pylint",
+            "type": "boolean",
+            "label": "Enable pylint reports",
+            "defaultValue": false,
+            "groupName": "tests",
+            "helpMarkDown": "Select to enable pylint report writing."
+        },
+        {
             "name": "dependencies",
             "type": "string",
             "label": "Dependencies",

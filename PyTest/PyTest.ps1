@@ -8,6 +8,8 @@ try {
     $resultfile = Get-VstsInput -Name "resultfile" -Require
     $resultprefix = Get-VstsInput -Name "resultprefix" -Default "py%winver%"
     $doctests = Get-VstsInput -Name "doctests" -AsBool
+    $codecoverage = Get-VstsInput -Name "codecoverage" -AsBool
+    $pylint = Get-VstsInput -Name "pylint" -AsBool
     $python = Get-PythonExe -Name "pythonpath"
     $dependencies = Get-VstsInput -Name "dependencies"
     $clearcache = Get-VstsInput -Name "clearcache" -AsBool
@@ -33,6 +35,16 @@ try {
                 mkdir $rfparent -Force | Out-Null
             }
             $args = '{0} --junitxml="{1}" --junitprefix="{2}"' -f ($args, $resultfile, $resultprefix)
+        }
+        
+        if ($codecoverage) {
+            $args = '{0} --cov=com --cov-report=xml --cov-report=html' -f ($args)
+            $dependencies '{0} pytest-cov' -f ($dependencies)
+        }
+        
+        if ($pylint) {
+            $args = '{0} --pylint' -f ($args)
+            $dependencies '{0} pytest-pylint' -f ($dependencies)
         }
 
         if ($testroot -and $patterns) {
