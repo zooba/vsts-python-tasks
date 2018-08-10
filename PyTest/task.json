@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 1,
-        "Patch": 2
+        "Patch": 3
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -88,11 +88,11 @@
         },
         {
             "name": "codecoverage",
-            "type": "boolean",
-            "label": "Enable code coverage reports",
-            "defaultValue": true,
+            "type": "string",
+            "label": "Collect coverage on modules",
+            "defaultValue": "",
             "groupName": "tests",
-            "helpMarkDown": "Select to enable code coverage report writing."
+            "helpMarkDown": "Specify modules to enable the use of `pytest-cov`."
         },
         {
             "name": "pylint",
@@ -141,6 +141,14 @@
             "defaultValue": "$(Build.BinariesDirectory)\\test",
             "groupName": "advanced",
             "helpMarkDown": "Base temporary directory. Each Python version creates its own subdirectory."
+        },
+        {
+            "name": "otherargs",
+            "type": "string",
+            "label": "Other arguments",
+            "defaultValue": "",
+            "groupName": "advanced",
+            "helpMarkDown": "Any other arguments to pass to the PyTest command line."
         },
         {
             "name": "abortOnFail",

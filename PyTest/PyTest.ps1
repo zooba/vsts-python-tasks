@@ -9,7 +9,7 @@ try {
     $resultfile = Get-VstsInput -Name "resultfile" -Require
     $resultprefix = Get-VstsInput -Name "resultprefix" -Default "py%winver%"
     $doctests = Get-VstsInput -Name "doctests" -AsBool
-    $codecoverage = Get-VstsInput -Name "codecoverage" -AsBool
+    $codecoverage = Get-VstsInput -Name "codecoverage"
     $pylint = Get-VstsInput -Name "pylint" -AsBool
     $python = Get-PythonExe -Name "pythonpath"
     $dependencies = Get-VstsInput -Name "dependencies"
@@ -17,6 +17,7 @@ try {
     $tempdir = Get-VstsInput -Name "tempdir" -Require
     $abortOnFail = Get-VstsInput -Name "abortOnFail" -AsBool
     $workingdir = Get-VstsInput -Name "workingdir" -Default ""
+    $otherargs = Get-VstsInput -Name "otherargs" -Default ""
 
     $args = "--color=no -q"
     if ($testfilter) {
@@ -39,7 +40,10 @@ try {
         }
         
         if ($codecoverage) {
-            $args = '{0} --cov=com --cov-report=xml --cov-report=html' -f ($args)
+            $args = '{0} {1} --cov-report=xml --cov-report=html' -f (
+                $args,
+                [String]::Join(' ', ($codecoverage.Split() | %{ "--cov=$_" }))
+            )
             $dependencies = '{0} pytest-cov' -f ($dependencies)
         }
         
@@ -54,6 +58,10 @@ try {
             foreach ($f in Find-VstsMatch $testroot $patterns) {
                 $args = '{0} "{1}"' -f ($args, $f)
             }
+        }
+
+        if ($otherargs) {
+            $args = '{0} {1}' -f ($args, $otherargs)
         }
 
         $env:winver = & $python -SEc "import sys;print(sys.winver)"
