@@ -6,7 +6,7 @@ try {
     $dependencies = Get-VstsInput -Name "dependencies"
     $nuGetAdditionalArgs = Get-VstsInput -Name "nuGetAdditionalArgs"
 
-    $nugetPath = (Get-Command 'nuget.exe' -EA 0).Source
+    $nugetPath = (Get-Command 'nuget.exe' -EA 0).Definition
     if (-not $nugetPath) {
         if (Test-Path "$env:AGENT_TOOLSDIRECTORY\nuget") {
             $nugetPath = (gci "$env:AGENT_TOOLSDIRECTORY\nuget" -Directory) | `
@@ -18,7 +18,7 @@ try {
     }
     if (-not $nugetPath) {
         Invoke-WebRequest https://aka.ms/nugetclidl -OutFile nuget.exe
-        $nugetPath = (Get-Command '.\nuget.exe' -EA 0).Source
+        $nugetPath = (Get-Command '.\nuget.exe' -EA 0).Definition
     }
     if (-not $nugetPath) {
         throw "Unable to locate nuget.exe. Use the Nuget Tool Installer task to ensure it is available."

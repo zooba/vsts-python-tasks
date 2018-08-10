@@ -9,11 +9,11 @@ if ($clean) {
 }
 
 if (-not (Test-Path "$root\python-conda\tools\conda.exe")) {
-    $nuGetPath = (Get-Command -Name 'nuget' -EA 0).Source
-    $nuGetPath = (Get-Command -Name '.\nuget.exe' -EA 0).Source
+    $nuGetPath = (Get-Command -Name 'nuget' -EA 0).Definition
+    $nuGetPath = (Get-Command -Name '.\nuget.exe' -EA 0).Definition
     if (-not $nuGetPath) {
         Invoke-WebRequest https://aka.ms/nugetclidl -OutFile nuget.exe
-        $nuGetPath = (Get-Command -Name '.\nuget.exe' -EA 0).Source
+        $nuGetPath = (Get-Command -Name '.\nuget.exe' -EA 0).Definition
         if (-not $nuGetPath) {
             throw ("Unable to locate nuget.exe")
         }
