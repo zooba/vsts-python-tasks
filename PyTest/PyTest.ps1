@@ -4,6 +4,7 @@ try {
 
     $testroot = Get-VstsInput -Name "testroot"
     $patterns = (Get-VstsInput -Name "patterns" -Default "").Split()
+    $packages = Get-VstsInput -Name "packages" -Default ""
     $testfilter = Get-VstsInput -Name "testfilter" -Default ""
     $resultfile = Get-VstsInput -Name "resultfile" -Require
     $resultprefix = Get-VstsInput -Name "resultprefix" -Default "py%winver%"
@@ -15,7 +16,7 @@ try {
     $clearcache = Get-VstsInput -Name "clearcache" -AsBool
     $tempdir = Get-VstsInput -Name "tempdir" -Require
     $abortOnFail = Get-VstsInput -Name "abortOnFail" -AsBool
-    $workingdir = Get-VstsInput -Name "workingdir" -Require
+    $workingdir = Get-VstsInput -Name "workingdir" -Default ""
 
     $args = "--color=no -q"
     if ($testfilter) {
@@ -47,7 +48,9 @@ try {
             $dependencies = '{0} pytest-pylint' -f ($dependencies)
         }
 
-        if ($testroot -and $patterns) {
+        if ($packages) {
+            $args = '{0} --pyargs {1}' -f ($args, $packages)
+        } elseif ($testroot -and $patterns) {
             foreach ($f in Find-VstsMatch $testroot $patterns) {
                 $args = '{0} "{1}"' -f ($args, $f)
             }
