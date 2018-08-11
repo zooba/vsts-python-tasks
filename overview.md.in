@@ -6,7 +6,7 @@ Note that these tasks only work on Windows build agents. For non-Windows platfor
 
 !InstallPython\task.json
 
-# Run Python script
+# Run Python command
 
 !PythonScript\task.json
 

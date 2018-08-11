@@ -1,9 +1,9 @@
 {
     "id": "75A63AC0-BAB7-4DAB-93F6-65FD41F51F09",
     "name": "PythonScript",
-    "friendlyName": "Run Python script",
-    "description": "Runs a script with one or more interpreters.",
-    "helpMarkDown": "The *Run Python script* task will let you enter any script or command to run with Python.",
+    "friendlyName": "Run Python command",
+    "description": "Runs a Python command line.",
+    "helpMarkDown": "The *Run Python command* task will let you enter any script or command to run with Python.\n\nConsider using the *Python Script* task for inline code.",
     "category": "Build",
     "visibility": [
         "Build",
@@ -13,13 +13,13 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 4
+        "Patch": 5
     },
     "minimumAgentVersion": "2.0",
     "groups": [
         {
             "name": "script",
-            "displayName": "Script",
+            "displayName": "Commands",
             "isExpanded": true
         },
         {

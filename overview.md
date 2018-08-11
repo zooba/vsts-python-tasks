@@ -12,9 +12,11 @@ The recommended configuration for using this task with multiple versions of Pyth
 
 (Note that the first-party *Use Python Version* task is preferable on the Hosted queues and works on all platforms, though as of 02 May 2018 is not fully available.)
 
-# Run Python script
+# Run Python command
 
-The *Run Python script* task will let you enter any script or command to run with Python.
+The *Run Python command* task will let you enter any script or command to run with Python.
+
+Consider using the *Python Script* task for inline code.
 
 # Run Python tests
 
