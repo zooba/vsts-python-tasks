@@ -14,7 +14,7 @@ try {
     $python = Get-PythonExe -Name "pythonpath"
     $dependencies = Get-VstsInput -Name "dependencies"
     $clearcache = Get-VstsInput -Name "clearcache" -AsBool
-    $tempdir = Get-VstsInput -Name "tempdir" -Require
+    $tempdir = Get-VstsInput -Name "tempdir"
     $abortOnFail = Get-VstsInput -Name "abortOnFail" -AsBool
     $workingdir = Get-VstsInput -Name "workingdir" -Default ""
     $otherargs = Get-VstsInput -Name "otherargs" -Default ""
@@ -42,7 +42,7 @@ try {
         if ($codecoverage) {
             $args = '{0} {1} --cov-report=xml --cov-report=html' -f (
                 $args,
-                [String]::Join(' ', ($codecoverage.Split() | %{ "--cov=$_" }))
+                [String]::Join(' ', ($codecoverage.Split(' ,;') | %{ "--cov=$_" }))
             )
             $dependencies = '{0} pytest-cov' -f ($dependencies)
         }

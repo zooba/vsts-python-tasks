@@ -3,7 +3,7 @@
     "name": "PyTest",
     "friendlyName": "Run Python tests",
     "description": "Runs tests using PyTest.",
-    "helpMarkDown": "The *Run Python tests* task will install and use [PyTest](https://pytest.org) to run your test suite. You should add a \"Publish Test Results\" task after this in order to see your test status in the build results page.",
+    "helpMarkDown": "The *Run Python tests* task will install and use [PyTest](https://pytest.org) to run your test suite. You should add a \"Publish Test Results\" task after this in order to see your test status in the build results page, and a \"Publish Code Coverage Results\" task referencing `coverage.xml` (Cobertura format) and `htmlcov` from this task's working directory.",
     "category": "Test",
     "visibility": [
         "Build",
@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 1,
-        "Patch": 3
+        "Patch": 4
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -28,7 +28,7 @@
             "isExpanded": false
         }
     ],
-    "instanceNameFormat": "PyTest",
+    "instanceNameFormat": "Run PyTest",
     "inputs": [
         {
             "name": "testroot",
@@ -66,7 +66,7 @@
             "name": "resultfile",
             "type": "filePath",
             "label": "Results File",
-            "defaultValue": "$(Build.BinariesDirectory)\\test\\test-py%winver%.xml",
+            "defaultValue": "test-py%winver%.xml",
             "groupName": "tests",
             "helpMarkDown": "Location to store test results in JUnit format. Add a \"Publish Test Results\" task to associate these results with your build."
         },
@@ -87,14 +87,6 @@
             "helpMarkDown": "Select to also execute all doctests discovered in test files."
         },
         {
-            "name": "codecoverage",
-            "type": "string",
-            "label": "Collect coverage on modules",
-            "defaultValue": "",
-            "groupName": "tests",
-            "helpMarkDown": "Specify modules to enable the use of `pytest-cov`."
-        },
-        {
             "name": "pylint",
             "type": "boolean",
             "label": "Enable pylint reports",
@@ -103,12 +95,20 @@
             "helpMarkDown": "Select to enable pylint report writing."
         },
         {
+            "name": "codecoverage",
+            "type": "string",
+            "label": "Collect coverage on modules",
+            "defaultValue": "",
+            "groupName": "tests",
+            "helpMarkDown": "Space, comma or semicolon separated list of modules to enable the use of `pytest-cov`."
+        },
+        {
             "name": "dependencies",
             "type": "string",
             "label": "Dependencies",
             "defaultValue": "pytest",
             "groupName": "tests",
-            "helpMarkDown": "Packages to install prior to running tests. Prefix with `--upgrade` to ensure you have the latest version."
+            "helpMarkDown": "Space-separated packages to install prior to running tests. Prefix with `--upgrade` to ensure you have the latest version."
         },
         {
             "name": "pythonpath",
@@ -138,7 +138,7 @@
             "name": "tempdir",
             "type": "filePath",
             "label": "Temp directory",
-            "defaultValue": "$(Build.BinariesDirectory)\\test",
+            "defaultValue": "",
             "groupName": "advanced",
             "helpMarkDown": "Base temporary directory. Each Python version creates its own subdirectory."
         },
@@ -156,7 +156,7 @@
             "label": "Abort on failed test result",
             "defaultValue": false,
             "groupName": "advanced",
-            "helpMarkDown": "Abort the build if any tests fail. **NOTE:** You will need to set any subsequent Publish Test Result task to always run, or you will not see your test results."
+            "helpMarkDown": "Abort the build if any tests fail. **NOTE:** You will need to set any subsequent \"Publish Test Result\" and \"Publish Code Coverage Result\" tasks to always run or you will not see your results."
         }
     ],
     "execution": {
