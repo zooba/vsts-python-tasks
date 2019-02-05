@@ -30,7 +30,7 @@ try {
             $args = '{0} --basetemp="{1}"' -f ($args, (mkdir $tempdir -Force))
         }
 
-        if ($resultfile) {
+        if ($resultfile -and -not (Test-Path $resultfile -PathType Container)) {
             $resultfile = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($resultfile)
             $rfparent = Split-Path $resultfile
             if ($rfparent) {
