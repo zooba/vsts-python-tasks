@@ -20,7 +20,7 @@ Consider using the *Python Script* task for inline code.
 
 # Run Python tests
 
-The *Run Python tests* task will install and use [PyTest](https://pytest.org) to run your test suite. You should add a "Publish Test Results" task after this in order to see your test status in the build results page, and a "Publish Code Coverage Results" task referencing `coverage.xml` (Cobertura format) and `htmlcov` from this task's working directory.
+The *Run Python tests* task will install and use [PyTest](https://pytest.org) to run your test suite. The [pytest-azurepipelines](https://pypi.org/project/pytest-azurepipelines) plugin is used to publish results. If you enable code coverage, you will need to add a "Publish Code Coverage Results" task referencing `coverage.xml` (Cobertura format) and `htmlcov` from this task's working directory.
 
 # Build Python wheels with pip
 
