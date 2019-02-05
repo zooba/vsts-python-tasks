@@ -2,6 +2,7 @@ Trace-VstsEnteringInvocation $MyInvocation
 try {
     . $PSScriptRoot\Get-PythonExe.ps1
 
+    $title = Get-VstsInput -Name "title"
     $testroot = Get-VstsInput -Name "testroot"
     $patterns = (Get-VstsInput -Name "patterns" -Default "").Split()
     $packages = Get-VstsInput -Name "packages" -Default ""
@@ -26,6 +27,10 @@ try {
 
     pushd $workingdir
     try {
+        if ($title) {
+            $args = '{0} --test-run-title="{1}"' -f ($args, $title)
+        }
+
         if ($tempdir) {
             $args = '{0} --basetemp="{1}"' -f ($args, (mkdir $tempdir -Force))
         }

@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 0,
-        "Patch": 2
+        "Patch": 3
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -30,6 +30,14 @@
     ],
     "instanceNameFormat": "Run PyTest",
     "inputs": [
+        {
+            "name": "title",
+            "type": "string",
+            "label": "Test Run Title",
+            "defaultValue": "",
+            "groupName": "tests",
+            "helpMarkDown": "Title of the test run. Requires the `pytest-azurepipelines` plugin."
+        },
         {
             "name": "testroot",
             "type": "filePath",
@@ -68,13 +76,13 @@
             "label": "Results File",
             "required": false,
             "groupName": "tests",
-            "helpMarkDown": "Location to store test results in JUnit format. Add a \"Publish Test Results\" task to associate these results with your build."
+            "helpMarkDown": "Location to store test results in JUnit format. Add a \"Publish Test Results\" task to associate these results with your build. This is not required when using the `pytest-azurepipelines` plugin."
         },
         {
             "name": "resultprefix",
             "type": "string",
             "label": "Results Prefix",
-            "defaultValue": "py%winver%",
+            "defaultValue": "",
             "groupName": "tests",
             "helpMarkDown": "Prefix to add to test names. The `%winver%` variable will contain `sys.winver` from the version of Python being executed."
         },
