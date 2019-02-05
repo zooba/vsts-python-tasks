@@ -6,7 +6,7 @@ try {
     $patterns = (Get-VstsInput -Name "patterns" -Default "").Split()
     $packages = Get-VstsInput -Name "packages" -Default ""
     $testfilter = Get-VstsInput -Name "testfilter" -Default ""
-    $resultfile = Get-VstsInput -Name "resultfile" -Require
+    $resultfile = Get-VstsInput -Name "resultfile" -Default ""
     $resultprefix = Get-VstsInput -Name "resultprefix" -Default "py%winver%"
     $doctests = Get-VstsInput -Name "doctests" -AsBool
     $codecoverage = Get-VstsInput -Name "codecoverage"
@@ -36,7 +36,10 @@ try {
             if ($rfparent) {
                 mkdir $rfparent -Force | Out-Null
             }
-            $args = '{0} --junitxml="{1}" --junitprefix="{2}"' -f ($args, $resultfile, $resultprefix)
+            $args = '{0} --junitxml="{1}"' -f ($args, $resultfile)
+        }
+        if ($resultprefix) {
+            $args = '{0} --junitprefix="{1}"' -f ($args, $resultprefix)
         }
         
         if ($codecoverage) {
@@ -76,10 +79,7 @@ try {
 
         try {
             if ($abortOnFail) {
-                Invoke-VstsTool $python "-m pytest $args"
-                if ($LASTEXITCODE -ne 0) {
-                    Write-Error "Test failures occurred. Ensure your Publish Test Results task is configured to always run, or you will not see any test results associated with this bulid."
-                }
+                Invoke-VstsTool $python "-m pytest $args" -RequireExitCodeZero
             } else {
                 Invoke-VstsTool $python "-m pytest $args"
             }
