@@ -16,7 +16,11 @@ try {
         Invoke-VstsTool $python "-m pip install $dependencies"
     }
 
-    $args = "-r $repository"
+    if ($repository -match '^HTTP') {
+        $args = "--repository-url $repository"
+    } else {
+        $args = "-r $repository"
+    }
     if ($pypirc -and (Test-Path $pypirc -PathType Leaf)) {
         $args = '{0} --config-file "{1}"' -f ($args, $pypirc)
     }
