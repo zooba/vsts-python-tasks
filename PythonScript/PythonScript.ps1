@@ -9,10 +9,10 @@ try {
     $dependencies = Get-VstsInput -Name "dependencies"
     $python = Get-PythonExe -Name "pythonpath"
 
-    if (Test-Path $script -PathType Leaf) {
+    if ($script -and (Test-Path $script -PathType Leaf)) {
         $arguments = '"{0}" {1}' -f $script, $args
     } else {
-        $arugments = $args
+        $arguments = $args
     }
 
     if ($dependencies) {
