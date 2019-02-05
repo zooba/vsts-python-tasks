@@ -6,7 +6,7 @@ try {
     $patterns = (Get-VstsInput -Name "patterns" -Default "").Split()
     $packages = Get-VstsInput -Name "packages" -Default ""
     $testfilter = Get-VstsInput -Name "testfilter" -Default ""
-    $resultfile = Get-VstsInput -Name "resultfile" -Default ""
+    $resultfile = Get-VstsInput -Name "resultfile"
     $resultprefix = Get-VstsInput -Name "resultprefix" -Default "py%winver%"
     $doctests = Get-VstsInput -Name "doctests" -AsBool
     $codecoverage = Get-VstsInput -Name "codecoverage"
