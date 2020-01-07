@@ -42,6 +42,15 @@
             }
         },
         {
+            "id": "InstallStorePython",
+            "description": "Installs Python into your build environment using the MSIX package.",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [ "ms.vss-distributed-task.tasks" ],
+            "properties": {
+                "name": "InstallStorePython"
+            }
+        },
+        {
             "id": "UploadPackage",
             "description": "Uploads package directory to PyPI or another index.",
             "type": "ms.vss-distributed-task.task",

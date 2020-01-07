@@ -13,7 +13,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 13
+        "Patch": 14
     },
     "minimumAgentVersion": "2.0",
     "groups": [
@@ -48,7 +48,7 @@
                 "pythonx86": "Latest 3.x (32-bit)",
                 "python2": "Latest 2.x (64-bit)",
                 "python2x86": "Latest 2.x (32-bit)",
-                "pythondaily": "Latest daily build (64-bit only)",
+                "pythondaily": "[REMOVED] Latest daily build (64-bit only)",
                 "$(PythonVersion)": "Use $(PythonVersion) variable"
             },
             "properties": {
@@ -61,7 +61,7 @@
             "label": "Install prerelease versions",
             "defaultValue": false,
             "groupName": "version",
-            "helpMarkDown": "Allow prerelease versions of Python to be installed. (Not required for daily builds.)"
+            "helpMarkDown": "Allow prerelease versions of Python to be installed."
         },
         {
             "name": "dependencies",

@@ -6,6 +6,10 @@ Note that these tasks only work on Windows build agents. For non-Windows platfor
 
 !InstallPython\task.json
 
+# Install Store Python
+
+!InstallStorePython\task.json
+
 # Run Python command
 
 !PythonScript\task.json
