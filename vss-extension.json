@@ -134,6 +134,7 @@
     ],
     "files": [
         { "path": "InstallPython" },
+        { "path": "InstallStorePython" },
         { "path": "PipWheel" },
         { "path": "UploadPackage" },
         { "path": "BuildWheel" },
