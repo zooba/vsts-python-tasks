@@ -37,7 +37,7 @@ try {
     }
 
     if ($version -match 'pythondaily') {
-        $ngArgs = "$ngArgs -FallbackSource https://www.myget.org/F/python/api/v3/index.json";
+        Write-Host "##[warning] Daily builds are no longer available."
     }
 
     if ($version -match '^(.+?)==(.+)$') {
