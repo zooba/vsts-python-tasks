@@ -30,6 +30,8 @@ try {
             $script_path = Join-Path (Split-Path -Parent $site_path) "Scripts"
             $env:PATH = '{1};{0}' -f ($env:PATH, $script_path)
             Write-Host "##vso[task.prependpath]$script_path"
+        }
+    }
 
     if ($dependencies) {
         Invoke-VstsTool (Join-Path $py_path "pip.exe") "install --upgrade $dependencies"
