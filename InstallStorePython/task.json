@@ -40,10 +40,11 @@
             "type": "pickList",
             "label": "Python Version",
             "defaultValue": "python",
-            "helpMarkDown": "Select a version to install, or enter a version prefix (for example, `3`, `3.8` or `3.8.1`). Version ranges and specifiers are not supported.",
+            "helpMarkDown": "Select a version to install (for example, `3.8.1`). Version ranges and specifiers are not supported.",
             "required" : true,
             "groupName": "version",
             "options": {
+                "3.7": "Latest 3.7",
                 "3.8": "Latest 3.8",
                 "$(PythonVersion)": "Use $(PythonVersion) variable"
             },

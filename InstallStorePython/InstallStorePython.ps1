@@ -1,20 +1,23 @@
 Trace-VstsEnteringInvocation $MyInvocation
 try {
-    $version = Get-VstsInput -Name "version" -Default "3.8"
+    $version = Get-VstsInput -Name "version" -Default "3.8.1"
     $dependencies = Get-VstsInput -Name "dependencies"
 
-    if ($version.Length -gt 3) {
-        $shortversion = $version.SubString(0, 3)
-    } else {
-        $shortversion = $version
+    if (-not $version -or ($version -eq "3.8")) {
+        $version = "3.8.1"
+    }
+    if ($version -eq "3.7") {
+        $version = "3.7.6"
     }
 
-    $package = gci "$PSScriptRoot\msix\python-$version*.msix" | sort -Desc | select -First 1
+    $package = Join-Path $env:TEMP "python-$version-amd64.msix"
+    Invoke-WebRequest "https://pythonbuild.blob.core.windows.net/msix/python-$version-amd64.msix" -OutFile $package -UseBasicParsing
 
-    Write-Verbose "Installing $($package.Name)"
+    Write-Verbose "Installing $(Split-Path -Leaf $package)"
 
-    Add-AppxPackage $package.FullName -ForceUpdateFromAnyVersion
-    $pfn = (Get-AppxPackage "PythonSoftwareFoundation.Python.$version*" | sort -Desc Version | select -First 1).PackageFamilyName
+    Add-AppxPackage $package -ForceUpdateFromAnyVersion
+    $shortversion = $version.SubString(0, 3)
+    $pfn = (Get-AppxPackage "PythonSoftwareFoundation.Python.$shortversion*" | sort -Desc Version | select -First 1).PackageFamilyName
 
     $py_path = "${env:LocalAppData}\Microsoft\WindowsApps\$pfn"
     if (Test-Path $py_path) {
