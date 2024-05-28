@@ -1,3 +1,5 @@
+**Deprecated:** Rather than using these tasks, please invoke Python directly.
+
 Adds tasks to simplify using Python in Visual Studio Team Services build definitions.
 
 Note that these tasks only work on Windows build agents. For non-Windows platforms, add the *Use Python Version* task to select the version you need and configure your command `PATH`.
