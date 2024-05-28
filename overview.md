@@ -1,3 +1,5 @@
+**Deprecated:** Rather than using these tasks, please invoke Python directly.
+
 Adds tasks to simplify using Python in Visual Studio Team Services build definitions.
 
 Note that these tasks only work on Windows build agents. For non-Windows platforms, add the *Use Python Version* task to select the version you need and configure your command `PATH`.
@@ -40,7 +42,7 @@ The *Build Python sdist* task uses a `setup.py` file to produce a source distrib
 
 The *Upload Python package* task uses `twine` to upload your built packages to the [Python Package Index](https://pypi.org). You may also select to upload to the test instance.
 
-Your username and password are required. It is recommended to add these as [encrypted build variables](https://docs.microsoft.com/en-us/vsts/build-release/concepts/definitions/build/variables?view=vsts&tabs=batch#secret-variables) or a [secured configuration file](https://docs.microsoft.com/en-us/vsts/build-release/tasks/utility/download-secure-file?view=vsts) rather than adding them directly to the task.
+Your username and password are required. It is recommended to add these as [encrypted build variables](https://docs.microsoft.com/azure/devops/pipelines/build/variables?view=azure-devops&tabs=batch#secret-variables) or a [secured configuration file](https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/download-secure-file?view=azure-devops) rather than adding them directly to the task.
 
 # Update version variables
 

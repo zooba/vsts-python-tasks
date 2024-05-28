@@ -1,9 +1,9 @@
 {
     "manifestVersion": 1,
     "id": "python",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "name": "Python build tools",
-    "description": "Visual Studio Team Services extension for Python developers.",
+    "description": "(Deprecated) Visual Studio Team Services extension for Python developers.",
     "publisher": "SteveDower",
     "public": true,
     "targets": [
